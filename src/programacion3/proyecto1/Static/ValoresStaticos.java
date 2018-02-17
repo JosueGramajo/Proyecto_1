@@ -16,7 +16,7 @@ public class ValoresStaticos {
     public static int ID_LOCAL;
     public static int TIPO_USUARIO; //0: super_usuario, 1: admin, 2: cajero
     
-    public static void msgError(String msg){
+    public static void MSG_ERROR(String msg){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
@@ -24,7 +24,7 @@ public class ValoresStaticos {
         alert.showAndWait();
     }
     
-    public static void msgInfo(String msg){
+    public static void MSG_INFO(String msg){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Informacion");
         alert.setHeaderText(null);
