@@ -14,7 +14,7 @@ import javafx.scene.control.Alert;
 public class ValoresStaticos {
     public static int ID_USUAIRO;
     public static int ID_LOCAL;
-    public static int TIPO_USUARIO; //0: super_usuario, 1: admin, 2: cajero
+    public static int TIPO_USUARIO; //1: admin, 2: cajero
     
     public static void MSG_ERROR(String msg){
         Alert alert = new Alert(Alert.AlertType.ERROR);
