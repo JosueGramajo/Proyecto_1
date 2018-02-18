@@ -12,83 +12,128 @@ import javafx.beans.property.SimpleIntegerProperty;
  *
  * @author Jose
  */
-public class Usuario {
+public class Usuario extends BaseObject{
     
-    private final SimpleIntegerProperty id;
-    private final SimpleStringProperty nombre;
-    private final SimpleStringProperty direccion;
-    private final SimpleStringProperty telefono;
-    private final SimpleStringProperty username;
-    private final SimpleStringProperty password;
-    private final SimpleIntegerProperty tipo_usuario;
+    private int id;
+    private String nombre;
+    private String direccion;
+    private String telefono;
+    private String username;
+    private String password;
+    private int tipo_usuario;
 
+    /**
+     *
+     */
+    public Usuario() {
+ 
+    }
+    
     public Usuario(int id, String nombre, String direccion, String telefono, String username, String password, int tipo_usuario) {
-        this.id = new SimpleIntegerProperty(id);
-        this.nombre = new SimpleStringProperty(nombre);
-        this.direccion = new SimpleStringProperty(direccion);
-        this.telefono = new SimpleStringProperty(telefono);
-        this.username = new SimpleStringProperty(username);
-        this.password = new SimpleStringProperty(password);
-        this.tipo_usuario = new SimpleIntegerProperty(tipo_usuario);    
+        this.id = id;
+        this.nombre = nombre;
+        this.direccion = direccion;
+        this.telefono = telefono;
+        this.username = username;
+        this.password = password;
+        this.tipo_usuario = tipo_usuario;    
     }
 
+    /**
+     * @return the id
+     */
     public int getId() {
-        return id.get();
+        return id;
     }
 
+    /**
+     * @param id the id to set
+     */
     public void setId(int id) {
-        this.id.set(id);
+        this.id = id;
     }
 
+    /**
+     * @return the nombre
+     */
     public String getNombre() {
-        return nombre.get();
+        return nombre;
     }
 
+    /**
+     * @param nombre the nombre to set
+     */
     public void setNombre(String nombre) {
-        this.nombre.set(nombre);
+        this.nombre = nombre;
     }
 
+    /**
+     * @return the direccion
+     */
     public String getDireccion() {
-        return direccion.get();
+        return direccion;
     }
 
+    /**
+     * @param direccion the direccion to set
+     */
     public void setDireccion(String direccion) {
-        this.direccion.set(direccion);
+        this.direccion = direccion;
     }
 
+    /**
+     * @return the telefono
+     */
     public String getTelefono() {
-        return telefono.get();
+        return telefono;
     }
 
+    /**
+     * @param telefono the telefono to set
+     */
     public void setTelefono(String telefono) {
-        this.telefono.set(telefono);
+        this.telefono = telefono;
     }
 
+    /**
+     * @return the username
+     */
     public String getUsername() {
-        return username.get();
+        return username;
     }
 
+    /**
+     * @param username the username to set
+     */
     public void setUsername(String username) {
-        this.username.set(username);
+        this.username = username;
     }
 
+    /**
+     * @return the password
+     */
     public String getPassword() {
-        return password.get();
+        return password;
     }
 
+    /**
+     * @param password the password to set
+     */
     public void setPassword(String password) {
-        this.password.set(password);
+        this.password = password;
     }
 
+    /**
+     * @return the tipo_usuario
+     */
     public int getTipo_usuario() {
-        return tipo_usuario.get();
+        return tipo_usuario;
     }
 
+    /**
+     * @param tipo_usuario the tipo_usuario to set
+     */
     public void setTipo_usuario(int tipo_usuario) {
-        this.tipo_usuario.set(tipo_usuario);
-    }
-    
-    
-    
-    
+        this.tipo_usuario = tipo_usuario;
+    }    
 }

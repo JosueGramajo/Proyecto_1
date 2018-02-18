@@ -18,8 +18,10 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import programacion3.proyecto1.Handlers.UserHandler;
 import programacion3.proyecto1.ProgramacionIIIProyecto1;
 import programacion3.proyecto1.Static.ValoresStaticos;
+import programacion3.proyecto1.utils.StatusResponse;
 
 /**
  *
@@ -80,10 +82,17 @@ public class LoginView {
         btnAceptar.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                //aqui se hace la validacion de el Login
-                ValoresStaticos.TIPO_USUARIO=1;
-                ((ProgramacionIIIProyecto1)main).menuPrincipal(primaryStage);
-                stage.close();
+                UserHandler usrHandler = new UserHandler();
+                
+                StatusResponse response = usrHandler.doLogin(txtUsuario.getText(), txtPassword.getText());
+                if(response.isSuccess()){
+                    //aqui se hace la validacion de el Login
+                    ValoresStaticos.TIPO_USUARIO=1;
+                    ((ProgramacionIIIProyecto1)main).menuPrincipal(primaryStage);
+                    stage.close(); 
+                }else{
+                    System.out.println(response.getStatus());
+                }
             }
         });
     }
