@@ -21,9 +21,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.TableCell;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import programacion3.proyecto1.Beans.Lists.UserList;
 import programacion3.proyecto1.Beans.Usuario;
 import programacion3.proyecto1.Handlers.UserHandler;
@@ -98,19 +100,63 @@ public class UsuarioView {
         
         TableColumn colId = new TableColumn("Id");
         colId.setCellValueFactory(new PropertyValueFactory<Usuario,Integer>("id"));
+        
         TableColumn colNombre = new TableColumn("Nombre");
         colNombre.setCellValueFactory(new PropertyValueFactory<Usuario,String>("nombre"));
+        
         TableColumn colDireccion = new TableColumn("Dirección");
         colDireccion.setCellValueFactory(new PropertyValueFactory<Usuario,String>("direccion"));
+        
         TableColumn colTelefono = new TableColumn("Teléfono");
         colTelefono.setCellValueFactory(new PropertyValueFactory<Usuario,String>("telefono"));
+        
         TableColumn colUsername = new TableColumn("Usuario");
         colUsername.setCellValueFactory(new PropertyValueFactory<Usuario,String>("username"));
+        
         TableColumn colTipoUsuario = new TableColumn("Tipo Usuario");
         colTipoUsuario.setCellValueFactory(new PropertyValueFactory<Usuario,Integer>("tipo_usuario"));
         
+                TableColumn colAction = new TableColumn("");
+        colAction.setCellFactory(new PropertyValueFactory<>(""));
+        
+        Callback<TableColumn<Usuario,String>, TableCell<Usuario, String>> cellFactory;
+        cellFactory = new Callback<TableColumn<Usuario,String>, TableCell<Usuario, String>>(){
+            @Override
+            public TableCell<Usuario, String> call(TableColumn<Usuario, String> param) {
+                final TableCell<Usuario, String> cell = new TableCell<Usuario, String>(){
+                    final Button btn = new Button("Eliminar");
+                    
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                            setText(null);
+                        } else {
+                            btn.setOnAction(event -> {
+                                Usuario user = getTableView().getItems().get(getIndex());
+                                UserHandler userHandler = new UserHandler();
+                                if(userHandler.deleteUser(user)){
+                                    ValoresStaticos.MSG_INFO("Usuario eliminado exitosamente");
+                                    getUsers();
+                                    tblUsuario.refresh();
+                                }else{
+                                    ValoresStaticos.MSG_ERROR("Ocurrio un error al intentar eliminar el usuario");
+                                }
+                                
+                            });
+                            setGraphic(btn);
+                            setText(null);
+                        }
+                    }                    
+                };
+                return cell;
+            }   
+        };
+        colAction.setCellFactory(cellFactory);
+        
         tblUsuario.setItems(data);
-        tblUsuario.getColumns().addAll(colId, colNombre, colDireccion, colTelefono, colUsername, colTipoUsuario);
+        tblUsuario.getColumns().addAll(colId, colNombre, colDireccion, colTelefono, colUsername, colTipoUsuario, colAction);
 
         ObservableList<String> options = 
         FXCollections.observableArrayList(

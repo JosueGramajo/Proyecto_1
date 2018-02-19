@@ -80,4 +80,16 @@ public class UserHandler {
             return false;
         }
     }
+    public boolean deleteUser(Usuario user){
+        try {
+            UserList existingList = json.readJSON(JsonUtils.FILE_TYPE.USER, UserList.class);
+            
+            existingList.getUserList().removeIf((Usuario u) -> u.getId() == user.getId());
+
+            return json.writeJSON(existingList, JsonUtils.FILE_TYPE.USER);           
+        } catch (IOException ex) {
+            Logger.getLogger(UserHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }     
+    }
 }
