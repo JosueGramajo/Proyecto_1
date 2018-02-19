@@ -5,7 +5,11 @@
  */
 package programacion3.proyecto1.Static;
 
+import java.util.ArrayList;
 import javafx.scene.control.Alert;
+import programacion3.proyecto1.Beans.Lists.UserList;
+import programacion3.proyecto1.Beans.Usuario;
+import programacion3.proyecto1.utils.JsonUtils;
 
 /**
  *
@@ -15,11 +19,11 @@ public class ValoresStaticos {
     public static int ID_USUAIRO;
     public static int ID_LOCAL;
     public static int TIPO_USUARIO; //1: admin, 2: cajero
+    public final static String PATH = System.getProperty("user.home") + "/Documents/Tiendita";
     
     public static void MSG_ERROR(String msg){
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
-        alert.setHeaderText(null);
         alert.setContentText(msg);
         alert.showAndWait();
     }
@@ -27,8 +31,24 @@ public class ValoresStaticos {
     public static void MSG_INFO(String msg){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Informacion");
-        alert.setHeaderText(null);
         alert.setContentText(msg);
         alert.showAndWait();
+    }
+    
+    public static void initUsers(){
+        Usuario user = new Usuario(1, "Josue","Ciudad","22558877","jgramajo","123",1);
+        Usuario user2 = new Usuario(2, "Kevin Vasquez","Ciudad","22558877","kvasquez","123",1);
+        Usuario user3 = new Usuario(3, "Manuel Vega","Ciudad","22558877","mvega","123",1);
+        Usuario user4 = new Usuario(4, "Jose Perez","Ciudad","22558877","jperez","123",1);
+
+        ArrayList<Usuario> list = new ArrayList<Usuario>();
+        list.add(user);
+        list.add(user2);
+        list.add(user3);
+        list.add(user4);
+        UserList userList = new UserList(4, list);
+        
+        JsonUtils json = new JsonUtils();
+        json.writeJSON(userList, JsonUtils.FILE_TYPE.USER);
     }
 }

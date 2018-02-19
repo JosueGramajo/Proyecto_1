@@ -3,9 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/josue/Desktop/Proyecto_1/src/programacion3/proyecto1/Static/ValoresStaticos.java</file>
-            <file>file:/C:/Users/josue/Desktop/Proyecto_1/src/programacion3/proyecto1/ProgramacionIIIProyecto1.java</file>
-            <file>file:/C:/Users/josue/Desktop/Proyecto_1/src/programacion3/proyecto1/Beans/Usuario.java</file>
+            <file>file:/C:/Users/josue/Desktop/Proyecto_1/src/programacion3/proyecto1/View/LoginView.java</file>
+            <file>file:/C:/Users/josue/Desktop/Proyecto_1/src/programacion3/proyecto1/Beans/Lists/UserList.java</file>
+            <file>file:/C:/Users/josue/Desktop/Proyecto_1/src/programacion3/proyecto1/utils/JsonUtils.java</file>
+            <file>file:/C:/Users/josue/Desktop/Proyecto_1/src/programacion3/proyecto1/View/UsuarioView.java</file>
+            <file>file:/C:/Users/josue/Desktop/Proyecto_1/src/programacion3/proyecto1/Handlers/UserHandler.java</file>
         </group>
     </open-files>
 </project-private>

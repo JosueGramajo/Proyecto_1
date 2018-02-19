@@ -5,12 +5,15 @@
  */
 package programacion3.proyecto1.View;
 
+import java.io.File;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -21,6 +24,7 @@ import javafx.stage.Stage;
 import programacion3.proyecto1.Handlers.UserHandler;
 import programacion3.proyecto1.ProgramacionIIIProyecto1;
 import programacion3.proyecto1.Static.ValoresStaticos;
+import programacion3.proyecto1.utils.JsonUtils;
 import programacion3.proyecto1.utils.StatusResponse;
 
 /**
@@ -83,15 +87,17 @@ public class LoginView {
             @Override
             public void handle(MouseEvent event) {
                 UserHandler usrHandler = new UserHandler();
+                String destinationPath = ValoresStaticos.PATH + "/" + JsonUtils.FILE_TYPE.USER.rawValue() + ".json";
+                if(new File(destinationPath).exists() == false){
+                    ValoresStaticos.initUsers();
+                }
                 
-                StatusResponse response = usrHandler.doLogin(txtUsuario.getText(), txtPassword.getText());
-                if(response.isSuccess()){
-                    //aqui se hace la validacion de el Login
-                    ValoresStaticos.TIPO_USUARIO=1;
+                StatusResponse status = usrHandler.doLogin(txtUsuario.getText(), txtPassword.getText());
+                if(status.isSuccess()){
                     ((ProgramacionIIIProyecto1)main).menuPrincipal(primaryStage);
                     stage.close(); 
                 }else{
-                    System.out.println(response.getStatus());
+                    ValoresStaticos.MSG_ERROR(status.getStatus());
                 }
             }
         });

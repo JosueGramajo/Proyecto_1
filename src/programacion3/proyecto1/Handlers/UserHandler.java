@@ -5,11 +5,15 @@
  */
 package programacion3.proyecto1.Handlers;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import programacion3.proyecto1.Beans.BaseObject;
+import programacion3.proyecto1.Beans.Lists.UserList;
 import programacion3.proyecto1.Beans.Usuario;
+import programacion3.proyecto1.Static.ValoresStaticos;
 import programacion3.proyecto1.utils.JsonUtils;
 import programacion3.proyecto1.utils.ObjectResponse;
 import programacion3.proyecto1.utils.StatusResponse;
@@ -23,25 +27,57 @@ public class UserHandler {
     
     public StatusResponse doLogin(String username, String password){
         StatusResponse response = new StatusResponse();
-        Usuario user = new Usuario();
+        UserList user = new UserList();
         
         try {
-            user = json.deserializeJSON(JsonUtils.FILE_TYPE.USER, Usuario.class);
+            user = json.readJSON(JsonUtils.FILE_TYPE.USER, UserList.class);
         } catch (IOException ex) {
             response.setSuccess(false);
-            response.setStatus("Ocurrio un error inesperado");
+            response.setStatus("No existe el archivo JSON");
+            return response;
         }
         
         if(user != null){ 
-           if(user.getUsername().equals(username) && user.getPassword().equals(password)){
-               response.setSuccess(true);
-               response.setStatus("Login exitoso");
-           }else{
-               response.setSuccess(false);
-               response.setStatus("Usuario o contraseña incorrecto");
-           }
+            for(Usuario us : user.getUserList()){
+                if(us.getUsername().equals(username) && us.getPassword().equals(password)){
+                    ValoresStaticos.TIPO_USUARIO = us.getTipo_usuario();
+                    response.setSuccess(true);
+                    response.setStatus("Login exitoso");
+                    return response;
+                }     
+            }
+            response.setSuccess(false);
+            response.setStatus("Usuario o contraseña incorrecto");
         }
         
         return response;
+    }
+    public boolean addUser(Usuario user){
+        try {
+            String destinationPath = ValoresStaticos.PATH + "/" + JsonUtils.FILE_TYPE.USER.rawValue() + ".json";
+            if(new File(destinationPath).exists()){
+                UserList existingList = json.readJSON(JsonUtils.FILE_TYPE.USER, UserList.class);
+                user.setId(existingList.getCurrentID() + 1);
+                existingList.setCurrentID(existingList.getCurrentID() + 1);
+
+                existingList.getUserList().add(user);
+               
+                return json.writeJSON(existingList, JsonUtils.FILE_TYPE.USER);           
+            }else{
+                UserList newList = new UserList();
+                ArrayList<Usuario> usrList = new ArrayList<Usuario>();
+               
+                user.setId(1);
+                usrList.add(user);
+                
+                newList.setCurrentID(1);
+                newList.setUserList(usrList);
+                
+                return json.writeJSON(newList, JsonUtils.FILE_TYPE.USER);  
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(UserHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 }

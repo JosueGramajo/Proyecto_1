@@ -5,6 +5,7 @@
  */
 package programacion3.proyecto1.View;
 
+import java.io.IOException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -18,10 +19,16 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import programacion3.proyecto1.Beans.Lists.UserList;
 import programacion3.proyecto1.Beans.Usuario;
+import programacion3.proyecto1.Handlers.UserHandler;
+import programacion3.proyecto1.Static.ValoresStaticos;
+import programacion3.proyecto1.utils.JsonUtils;
 
 /**
  *
@@ -33,27 +40,32 @@ public class UsuarioView {
     private Scene scene;
     private Stage stage;
     
-    private Label lbId, lbNombre, lbDireccion, lbTelefono, lbUsername, lbPassword, lbTipoUsuario; 
-    private TextField tfId, tfNombre, tfDireccion, tfTelefono, tfUsername;
+    private Label lbNombre, lbDireccion, lbTelefono, lbUsername, lbPassword, lbTipoUsuario; 
+    private TextField tfNombre, tfDireccion, tfTelefono, tfUsername;
     private PasswordField pfPassword;
     private ComboBox cbTipoUsuario;
     private Button btnAgregar;
     private TableView tblUsuario;
-
-    private final ObservableList<Usuario> data = FXCollections.observableArrayList(
-            new Usuario(1,"Josue Gramajo", "Ciudad", "12345678", "jgramajo", "123",1),
-            new Usuario(2,"Kevin Vasquez", "Ciudad", "12345678", "kvasquez", "123",1),
-            new Usuario(3,"Manuel Vega", "Ciudad", "12345678", "mvega", "123",1),
-            new Usuario(4,"Jose Perez", "Ciudad", "12345678", "jperez", "123",1)
-        );
- 
     
-    public Stage ventana(){    
-        
-        lbId = new Label("Id");
-        tfId = new TextField();
-        tfId.setMaxWidth(150);
-        
+    private JsonUtils json = new JsonUtils();
+
+    private final ObservableList<Usuario> data = FXCollections.observableArrayList();
+ 
+    public void getUsers(){
+        data.clear();
+        try{
+            UserList list = json.readJSON(JsonUtils.FILE_TYPE.USER, UserList.class);
+            for(Usuario us : list.getUserList()){
+                data.add(us);
+            }
+        }catch(IOException ex){
+            ex.printStackTrace();
+        }
+    }
+    
+    public Stage ventana(){   
+        getUsers();
+                
         lbNombre = new Label("Nombre");
         tfNombre = new TextField();
         tfNombre.setMaxWidth(150);
@@ -108,8 +120,6 @@ public class UsuarioView {
         grid.setHgap(20);
         grid.setVgap(20);
         grid.setPadding(new Insets(10, 10, 10, 10));
-        grid.add(lbId, 0,0);
-        grid.add(tfId, 1,0);
         grid.add(lbNombre, 0,1);
         grid.add(tfNombre, 1,1);
         grid.add(lbDireccion, 0,2);
@@ -136,6 +146,26 @@ public class UsuarioView {
     }
     
     public void eventos(){
-    
+        btnAgregar.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Usuario user = new Usuario();
+                user.setNombre(tfNombre.getText());
+                user.setDireccion(tfDireccion.getText());
+                user.setTelefono(tfTelefono.getText());
+                user.setUsername(tfUsername.getText());
+                user.setPassword(pfPassword.getText());
+                
+                UserHandler userHandler = new UserHandler();
+                
+                if(userHandler.addUser(user)){
+                    ValoresStaticos.MSG_INFO("Usuario Agregado Exitosamente");
+                    getUsers();
+                    tblUsuario.refresh();
+                }else{
+                    ValoresStaticos.MSG_ERROR("Ocurrio un error al agregar el usuario");
+                }
+            }
+        });
     }
 }

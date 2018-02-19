@@ -12,17 +12,20 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import java.io.File;
 import java.io.IOException;
 import programacion3.proyecto1.Beans.BaseObject;
+import programacion3.proyecto1.Static.ValoresStaticos;
 
 /**
  *
  * @author josue
  */
 public class JsonUtils {
-    private static String path = System.getProperty("user.home") + "/Documents/Tiendita";
+    private final static String PATH = ValoresStaticos.PATH;
     
     public enum FILE_TYPE{
         USER("users"),
-        PRODUCT("product");
+        PRODUCT("product"),
+        CLIENT("clients"),
+        SALE("sales");
         
         private String value;
         
@@ -36,14 +39,14 @@ public class JsonUtils {
     }
     
     public boolean writeJSON(BaseObject object, FILE_TYPE type){
-        if(!new File(path).exists()){
-            new File(path).mkdirs();
+        if(!new File(PATH).exists()){
+            new File(PATH).mkdirs();
         }
         ObjectMapper mapper = new ObjectMapper();
         ObjectWriter writer = mapper.writer(new DefaultPrettyPrinter());
         
         try{
-            writer.writeValue(new File(path + "/"+type.rawValue()+".json"), object);
+            writer.writeValue(new File(PATH + "/"+type.rawValue()+".json"), object);
         }catch(IOException ex){
             ex.printStackTrace();
             return false;
@@ -51,8 +54,8 @@ public class JsonUtils {
                 
         return true;
     }
-    public <T> T deserializeJSON(final FILE_TYPE type, final Class<T> responseClass) throws IOException {
-        String jsonPath = path + "/"+ type.rawValue() +".json";
+    public <T> T readJSON(final FILE_TYPE type, final Class<T> responseClass) throws IOException {
+        String jsonPath = PATH + "/" + type.rawValue() + ".json";
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(new File(jsonPath), responseClass);
     }
