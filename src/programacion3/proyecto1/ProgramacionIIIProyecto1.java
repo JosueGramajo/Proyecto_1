@@ -21,7 +21,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import programacion3.proyecto1.Static.ValoresStaticos;
+import programacion3.proyecto1.View.ClienteView;
 import programacion3.proyecto1.View.LoginView;
+import programacion3.proyecto1.View.ProductoView;
 import programacion3.proyecto1.View.UsuarioView;
 
 /**
@@ -98,6 +100,15 @@ public class ProgramacionIIIProyecto1 extends Application {
         crudProducto.setFitWidth(80);
         crudProducto.setFitHeight(80);
         btnCrudProducto.setGraphic(crudProducto);
+        btnCrudProducto.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent event) {
+                Stage stage = new ProductoView().ventana();
+                stage.initOwner(primaryStage);
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.show();
+            }
+        });
         flowAdmin.getChildren().add(btnCrudProducto);
         
         Button btnCrudCliente = new Button();
@@ -106,6 +117,15 @@ public class ProgramacionIIIProyecto1 extends Application {
         crudCliente.setFitWidth(80);
         crudCliente.setFitHeight(80);
         btnCrudCliente.setGraphic(crudCliente);
+        btnCrudCliente.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent event) {
+                Stage stage = new ClienteView().ventana();
+                stage.initOwner(primaryStage);
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.show();
+            }
+        });
         flowAdmin.getChildren().add(btnCrudCliente);
         
         Button btnCrudCorteCaja = new Button();

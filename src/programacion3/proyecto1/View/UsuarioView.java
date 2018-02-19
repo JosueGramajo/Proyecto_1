@@ -86,6 +86,10 @@ public class UsuarioView {
         pfPassword = new PasswordField();
         pfPassword.setMaxWidth(150);
         
+        lbTipoUsuario = new Label("Tipo de Usuario");
+        cbTipoUsuario = new ComboBox();
+        cbTipoUsuario.setMaxWidth(150);
+        
         btnAgregar = new Button("Agregar");
         
         tblUsuario = new TableView();
@@ -113,7 +117,7 @@ public class UsuarioView {
             "Administrador",
             "Cajero"
         );
-        lbTipoUsuario = new Label("Rol");
+        lbTipoUsuario = new Label("Cargo");
         cbTipoUsuario = new ComboBox(options);      
         
         grid = new GridPane();
@@ -130,8 +134,10 @@ public class UsuarioView {
         grid.add(tfUsername, 1,4);
         grid.add(lbPassword, 0,5);
         grid.add(pfPassword, 1,5);
-        grid.add(btnAgregar,1,6);
-        grid.add(tblUsuario, 0,7 , 2,1);
+        grid.add(lbTipoUsuario, 0,6);
+        grid.add(cbTipoUsuario, 1,6);
+        grid.add(btnAgregar,1,7);
+        grid.add(tblUsuario, 0, 8, 2,1);
              
                 
         scene = new Scene(grid, 610, 500);
