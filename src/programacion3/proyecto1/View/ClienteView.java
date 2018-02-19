@@ -111,12 +111,14 @@ public class ClienteView {
         grid.add(btnAgregar,1,5);
         grid.add(tblCliente, 0,6 , 2,1);
      
-        scene = new Scene(grid, 610, 500);
+        scene = new Scene(grid, 640, 700);
         stage = new Stage();
         
         stage.getIcons().add(new Image(getClass().getResourceAsStream("img/cliente.png")));
         stage.setTitle("Clientes");
         stage.setScene(scene);
+        
+        scene.getStylesheets().add(LoginView.class.getResource("css/bootstrap3.css").toExternalForm());
         
         eventos();
         return stage;

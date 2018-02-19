@@ -116,7 +116,7 @@ public class UsuarioView {
         TableColumn colTipoUsuario = new TableColumn("Tipo Usuario");
         colTipoUsuario.setCellValueFactory(new PropertyValueFactory<Usuario,Integer>("tipo_usuario"));
         
-                TableColumn colAction = new TableColumn("");
+        TableColumn colAction = new TableColumn("");
         colAction.setCellFactory(new PropertyValueFactory<>(""));
         
         Callback<TableColumn<Usuario,String>, TableCell<Usuario, String>> cellFactory;
@@ -186,12 +186,14 @@ public class UsuarioView {
         grid.add(tblUsuario, 0, 8, 2,1);
              
                 
-        scene = new Scene(grid, 610, 500);
+        scene = new Scene(grid, 640, 700);
         stage = new Stage();
         
         stage.getIcons().add(new Image(getClass().getResourceAsStream("img/usuario.png")));
         stage.setTitle("Usuarios");
         stage.setScene(scene);
+        
+        scene.getStylesheets().add(LoginView.class.getResource("css/bootstrap3.css").toExternalForm());
         
         eventos();
         return stage;

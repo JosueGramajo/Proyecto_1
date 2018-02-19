@@ -71,12 +71,14 @@ public class LoginView {
         grid.add(btnAceptar, 0, 2, 2,1); 
         grid.setAlignment(Pos.CENTER); 
         
-        scene = new Scene(grid, 300, 250);
+        scene = new Scene(grid, 700, 500);
         stage = new Stage();
         
         stage.getIcons().add(new Image(getClass().getResourceAsStream("img/facturacion.png")));
         stage.setTitle("Login");
         stage.setScene(scene);
+        
+        scene.getStylesheets().add(LoginView.class.getResource("css/bootstrap3.css").toExternalForm());
         
         eventos();
         return stage;

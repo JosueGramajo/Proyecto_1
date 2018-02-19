@@ -118,12 +118,14 @@ public class ProductoView {
         grid.add(btnAgregar,1,6);
         grid.add(tblProducto, 0,7 , 2,1);
         
-        scene = new Scene(grid, 610, 500);
+        scene = new Scene(grid, 640, 700);
         stage = new Stage();
         
         stage.getIcons().add(new Image(getClass().getResourceAsStream("img/producto.png")));
         stage.setTitle("Productos");
         stage.setScene(scene);
+        
+        scene.getStylesheets().add(LoginView.class.getResource("css/bootstrap3.css").toExternalForm());
         
         eventos();
         return stage;   
