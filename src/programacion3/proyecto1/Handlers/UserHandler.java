@@ -23,14 +23,14 @@ import programacion3.proyecto1.utils.StatusResponse;
  * @author josue
  */
 public class UserHandler {
-    JsonUtils json = new JsonUtils();
+    public static UserHandler INSTANCIA = new UserHandler();
     
     public StatusResponse doLogin(String username, String password){
         StatusResponse response = new StatusResponse();
         UserList user = new UserList();
         
         try {
-            user = json.readJSON(JsonUtils.FILE_TYPE.USER, UserList.class);
+            user = JsonUtils.INSTANCIA.readJSON(JsonUtils.FILE_TYPE.USER, UserList.class);
         } catch (IOException ex) {
             response.setSuccess(false);
             response.setStatus("No existe el archivo JSON");
@@ -56,13 +56,13 @@ public class UserHandler {
         try {
             String destinationPath = ValoresStaticos.PATH + "/" + JsonUtils.FILE_TYPE.USER.rawValue() + ".json";
             if(new File(destinationPath).exists()){
-                UserList existingList = json.readJSON(JsonUtils.FILE_TYPE.USER, UserList.class);
+                UserList existingList = JsonUtils.INSTANCIA.readJSON(JsonUtils.FILE_TYPE.USER, UserList.class);
                 user.setId(existingList.getCurrentID() + 1);
                 existingList.setCurrentID(existingList.getCurrentID() + 1);
 
                 existingList.getUserList().add(user);
                
-                return json.writeJSON(existingList, JsonUtils.FILE_TYPE.USER);           
+                return JsonUtils.INSTANCIA.writeJSON(existingList, JsonUtils.FILE_TYPE.USER);           
             }else{
                 UserList newList = new UserList();
                 ArrayList<Usuario> usrList = new ArrayList<Usuario>();
@@ -73,7 +73,7 @@ public class UserHandler {
                 newList.setCurrentID(1);
                 newList.setUserList(usrList);
                 
-                return json.writeJSON(newList, JsonUtils.FILE_TYPE.USER);  
+                return JsonUtils.INSTANCIA.writeJSON(newList, JsonUtils.FILE_TYPE.USER);  
             }
         } catch (IOException ex) {
             Logger.getLogger(UserHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -82,14 +82,28 @@ public class UserHandler {
     }
     public boolean deleteUser(Usuario user){
         try {
-            UserList existingList = json.readJSON(JsonUtils.FILE_TYPE.USER, UserList.class);
+            UserList existingList = JsonUtils.INSTANCIA.readJSON(JsonUtils.FILE_TYPE.USER, UserList.class);
             
             existingList.getUserList().removeIf((Usuario u) -> u.getId() == user.getId());
 
-            return json.writeJSON(existingList, JsonUtils.FILE_TYPE.USER);           
+            return JsonUtils.INSTANCIA.writeJSON(existingList, JsonUtils.FILE_TYPE.USER);           
         } catch (IOException ex) {
             Logger.getLogger(UserHandler.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }     
+    }
+    public boolean editUser(Usuario user){
+        try {
+            UserList existingList = JsonUtils.INSTANCIA.readJSON(JsonUtils.FILE_TYPE.USER, UserList.class);
+            
+            existingList.getUserList().removeIf((Usuario u) -> u.getId() == user.getId());
+            
+            existingList.getUserList().add(user);
+
+            return JsonUtils.INSTANCIA.writeJSON(existingList, JsonUtils.FILE_TYPE.USER);           
+        } catch (IOException ex) {
+            Logger.getLogger(UserHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }   
     }
 }

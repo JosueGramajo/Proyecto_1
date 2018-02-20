@@ -86,13 +86,12 @@ public class LoginView {
         btnAceptar.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                UserHandler usrHandler = new UserHandler();
                 String destinationPath = ValoresStaticos.PATH + "/" + JsonUtils.FILE_TYPE.USER.rawValue() + ".json";
                 if(new File(destinationPath).exists() == false){
                     ValoresStaticos.initUsers();
                 }
                 
-                StatusResponse status = usrHandler.doLogin(txtUsuario.getText(), txtPassword.getText());
+                StatusResponse status = UserHandler.INSTANCIA.doLogin(txtUsuario.getText(), txtPassword.getText());
                 if(status.isSuccess()){
                     ((ProgramacionIIIProyecto1)main).menuPrincipal();
                     stage.close(); 

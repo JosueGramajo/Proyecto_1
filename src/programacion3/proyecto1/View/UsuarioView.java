@@ -46,10 +46,12 @@ public class UsuarioView {
     private TextField tfNombre, tfDireccion, tfTelefono, tfUsername;
     private PasswordField pfPassword;
     private ComboBox cbTipoUsuario;
-    private Button btnAgregar;
+    private Button btnAgregar, btnEditar, btnCancelarEdicion;
     private TableView tblUsuario;
     
     private JsonUtils json = new JsonUtils();
+    
+    public static int editingId = 0;
 
     private final ObservableList<Usuario> data = FXCollections.observableArrayList();
  
@@ -93,9 +95,14 @@ public class UsuarioView {
         cbTipoUsuario.setMaxWidth(150);
         
         btnAgregar = new Button("Agregar");
+        btnEditar = new Button("Editar");
+        btnEditar.setVisible(false);
+        
+        btnCancelarEdicion = new Button("Cancelar");
+        btnCancelarEdicion.setVisible(false);
         
         tblUsuario = new TableView();
-        tblUsuario.setPrefWidth(600);
+        tblUsuario.setPrefWidth(800);
         tblUsuario.setEditable(true);
         
         TableColumn colId = new TableColumn("Id");
@@ -117,6 +124,9 @@ public class UsuarioView {
         colTipoUsuario.setCellValueFactory(new PropertyValueFactory<Usuario,Integer>("tipo_usuario"));
         
         TableColumn colAction = new TableColumn("");
+        colAction.setCellFactory(new PropertyValueFactory<>(""));
+        
+        TableColumn colActionEdit = new TableColumn("");
         colAction.setCellFactory(new PropertyValueFactory<>(""));
         
         Callback<TableColumn<Usuario,String>, TableCell<Usuario, String>> cellFactory;
@@ -155,8 +165,46 @@ public class UsuarioView {
         };
         colAction.setCellFactory(cellFactory);
         
+        
+        Callback<TableColumn<Usuario,String>, TableCell<Usuario, String>> cellFactoryEdicion;
+        cellFactoryEdicion = new Callback<TableColumn<Usuario,String>, TableCell<Usuario, String>>(){
+            @Override
+            public TableCell<Usuario, String> call(TableColumn<Usuario, String> param) {
+                final TableCell<Usuario, String> cell = new TableCell<Usuario, String>(){
+                    final Button btn = new Button("Editar");
+                    
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                            setText(null);
+                        } else {
+                            btn.setOnAction(event -> {
+                                Usuario user = getTableView().getItems().get(getIndex());
+                                btnAgregar.setVisible(false);
+                                btnEditar.setVisible(true);
+                                btnCancelarEdicion.setVisible(true);
+                                
+                                tfNombre.setText(user.getNombre());
+                                tfDireccion.setText(user.getDireccion());
+                                tfTelefono.setText(user.getTelefono());
+                                tfUsername.setText(user.getUsername());
+                                pfPassword.setText(user.getPassword());
+                                editingId = user.getId();
+                            });
+                            setGraphic(btn);
+                            setText(null);
+                        }
+                    }                    
+                };
+                return cell;
+            }   
+        };
+        colActionEdit.setCellFactory(cellFactoryEdicion);
+        
         tblUsuario.setItems(data);
-        tblUsuario.getColumns().addAll(colId, colNombre, colDireccion, colTelefono, colUsername, colTipoUsuario, colAction);
+        tblUsuario.getColumns().addAll(colId, colNombre, colDireccion, colTelefono, colUsername, colTipoUsuario, colAction, colActionEdit);
 
         ObservableList<String> options = 
         FXCollections.observableArrayList(
@@ -183,6 +231,8 @@ public class UsuarioView {
         grid.add(lbTipoUsuario, 0,6);
         grid.add(cbTipoUsuario, 1,6);
         grid.add(btnAgregar,1,7);
+        grid.add(btnEditar,0,7);
+        grid.add(btnCancelarEdicion, 1, 7);
         grid.add(tblUsuario, 0, 8, 2,1);
              
                 
@@ -198,27 +248,104 @@ public class UsuarioView {
         eventos();
         return stage;
     }
-    
+    public boolean checkFields(){
+        if(tfNombre.getText().equals("") ||
+                tfDireccion.getText().equals("") ||
+                tfTelefono.getText().equals("") ||
+                tfUsername.getText().equals("") ||
+                pfPassword.getText().equals("") ||
+                cbTipoUsuario.getValue() == null){
+
+            ValoresStaticos.MSG_ERROR("Todos los campos son obligatorios");
+            return false;
+        }
+        return true;
+    }
     public void eventos(){
         btnAgregar.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
-            public void handle(MouseEvent event) {
-                Usuario user = new Usuario();
-                user.setNombre(tfNombre.getText());
-                user.setDireccion(tfDireccion.getText());
-                user.setTelefono(tfTelefono.getText());
-                user.setUsername(tfUsername.getText());
-                user.setPassword(pfPassword.getText());
-                
-                UserHandler userHandler = new UserHandler();
-                
-                if(userHandler.addUser(user)){
-                    ValoresStaticos.MSG_INFO("Usuario Agregado Exitosamente");
-                    getUsers();
-                    tblUsuario.refresh();
-                }else{
-                    ValoresStaticos.MSG_ERROR("Ocurrio un error al agregar el usuario");
+            public void handle(MouseEvent event) { 
+                if(checkFields()){
+                    Usuario user = new Usuario();
+                    user.setNombre(tfNombre.getText());
+                    user.setDireccion(tfDireccion.getText());
+                    user.setTelefono(tfTelefono.getText());
+                    user.setUsername(tfUsername.getText());
+                    user.setPassword(pfPassword.getText());
+
+                    int rol = 0;
+                    if(cbTipoUsuario.getValue().equals("Administrador")){
+                        rol = 1;
+                    }else if(cbTipoUsuario.getValue().equals("Cajero")){
+                        rol = 2;
+                    }
+                    user.setTipo_usuario(rol);
+
+                    if(UserHandler.INSTANCIA.addUser(user)){
+                        ValoresStaticos.MSG_INFO("Usuario Agregado Exitosamente");
+                        getUsers();
+                        tblUsuario.refresh();
+                    }else{
+                        ValoresStaticos.MSG_ERROR("Ocurrio un error al agregar el usuario");
+                    }                
                 }
+            }
+        });
+        btnEditar.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                
+                if(checkFields()){
+                    Usuario user = new Usuario();
+                    user.setId(editingId);
+                    user.setNombre(tfNombre.getText());
+                    user.setDireccion(tfDireccion.getText());
+                    user.setTelefono(tfTelefono.getText());
+                    user.setUsername(tfUsername.getText());
+                    user.setPassword(pfPassword.getText());
+
+                    int rol = 0;
+                    if(cbTipoUsuario.getValue().equals("Administrador")){
+                        rol = 1;
+                    }else if(cbTipoUsuario.getValue().equals("Cajero")){
+                        rol = 2;
+                    }
+                    user.setTipo_usuario(rol);
+
+                    if(UserHandler.INSTANCIA.editUser(user)){
+                        ValoresStaticos.MSG_INFO("Usuario Editado Exitosamente");
+                        getUsers();
+                        tblUsuario.refresh();
+                        
+                        btnEditar.setVisible(false);
+                        btnCancelarEdicion.setVisible(false);
+                        btnAgregar.setVisible(true);
+
+                        tfNombre.setText("");
+                        tfDireccion.setText("");
+                        tfTelefono.setText("");
+                        tfUsername.setText("");
+                        pfPassword.setText("");
+                        
+                        editingId = 0;
+                    }else{
+                        ValoresStaticos.MSG_ERROR("Ocurrio un error al editar el usuario");
+                    }                
+                }
+            }
+        });
+        btnCancelarEdicion.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                btnEditar.setVisible(false);
+                btnCancelarEdicion.setVisible(false);
+                btnAgregar.setVisible(true);
+                
+                tfNombre.setText("");
+                tfDireccion.setText("");
+                tfTelefono.setText("");
+                tfUsername.setText("");
+                pfPassword.setText("");
             }
         });
     }

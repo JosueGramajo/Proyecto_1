@@ -20,6 +20,7 @@ import programacion3.proyecto1.Static.ValoresStaticos;
  */
 public class JsonUtils {
     private final static String PATH = ValoresStaticos.PATH;
+    public static JsonUtils INSTANCIA = new JsonUtils();
     
     public enum FILE_TYPE{
         USER("users"),
