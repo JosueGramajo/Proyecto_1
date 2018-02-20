@@ -11,17 +11,19 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import programacion3.proyecto1.Static.ValoresStaticos;
 import programacion3.proyecto1.View.ClienteView;
+import programacion3.proyecto1.View.CorteCajaView;
+import programacion3.proyecto1.View.FacturacionView;
 import programacion3.proyecto1.View.LoginView;
 import programacion3.proyecto1.View.ProductoView;
 import programacion3.proyecto1.View.UsuarioView;
@@ -38,27 +40,31 @@ public class ProgramacionIIIProyecto1 extends Application {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         LoginView ventana = new LoginView();
-        ventana.login(primaryStage, this).show();
+        ventana.login(this).show();
     }
     
-    public void menuPrincipal(Stage primaryStage){
+    public void menuPrincipal(){
         GridPane grid = new GridPane();
         String titulo = "";
+        Scene scene;
+        
         if(ValoresStaticos.TIPO_USUARIO==1){
             grid.add(menuAdministrador(), 0, 0);
             titulo = "Administrador";
+            scene = new Scene(grid, 170, 470);
         }else{
             grid.add(menuCajero(), 0, 0);
             titulo = "Cajero";
+            scene = new Scene(grid, 250, 250);
         }
         grid.setAlignment(Pos.CENTER); 
         
-        Scene scene = new Scene(grid, 170, 470);
+        
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("View/img/facturacion.png")));
         primaryStage.setTitle(titulo);
         primaryStage.setScene(scene);
-        primaryStage.setMinWidth(190);
-        primaryStage.setMinHeight(170);
+        primaryStage.setMinWidth(250);
+        primaryStage.setMinHeight(250);
         primaryStage.setMaxWidth(470);
         primaryStage.setMaxHeight(470);
         //primaryStage.initStyle(StageStyle.UTILITY);
@@ -77,12 +83,16 @@ public class ProgramacionIIIProyecto1 extends Application {
         flowAdmin.setPrefWrapLength(500); // preferred width allows for two columns
         flowAdmin.setAlignment(Pos.CENTER); 
         
-        Button btnCrudUsuaro = new Button();
-        ImageView crudUsuario = new ImageView();
-        crudUsuario = new ImageView(new Image(getClass().getResourceAsStream("View/img/usuario.png")));
+        
+        Button btnCrudUsuaro = new Button("Usuaios");
+        btnCrudUsuaro.setPrefSize(170, 90);
+        ImageView crudUsuario = new ImageView(new Image(getClass().getResourceAsStream("View/img/usuario.png")));
         crudUsuario.setFitWidth(80);
         crudUsuario.setFitHeight(80);
         btnCrudUsuaro.setGraphic(crudUsuario);
+        Tooltip ttCrudUsuario = new Tooltip();
+        ttCrudUsuario.setText("Usuarios");
+        btnCrudUsuaro.setTooltip(ttCrudUsuario);
         btnCrudUsuaro.setOnMouseClicked(new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent event) {
@@ -94,12 +104,15 @@ public class ProgramacionIIIProyecto1 extends Application {
         });
         flowAdmin.getChildren().add(btnCrudUsuaro);
         
-        Button btnCrudProducto = new Button();
-        ImageView crudProducto = new ImageView();
-        crudProducto = new ImageView(new Image(getClass().getResourceAsStream("View/img/producto.png")));
+        Button btnCrudProducto = new Button("Productos");
+        btnCrudProducto.setPrefSize(170, 90);
+        ImageView crudProducto = new ImageView(new Image(getClass().getResourceAsStream("View/img/producto.png")));
         crudProducto.setFitWidth(80);
         crudProducto.setFitHeight(80);
         btnCrudProducto.setGraphic(crudProducto);
+        Tooltip ttCrudProducto = new Tooltip();
+        ttCrudProducto.setText("Productos");
+        btnCrudProducto.setTooltip(ttCrudProducto);
         btnCrudProducto.setOnMouseClicked(new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent event) {
@@ -111,12 +124,15 @@ public class ProgramacionIIIProyecto1 extends Application {
         });
         flowAdmin.getChildren().add(btnCrudProducto);
         
-        Button btnCrudCliente = new Button();
-        ImageView crudCliente= new ImageView();
-        crudCliente = new ImageView(new Image(getClass().getResourceAsStream("View/img/cliente.png")));
+        Button btnCrudCliente = new Button("Clientes");
+        btnCrudCliente.setPrefSize(170, 90);
+        ImageView crudCliente = new ImageView(new Image(getClass().getResourceAsStream("View/img/cliente.png")));
         crudCliente.setFitWidth(80);
         crudCliente.setFitHeight(80);
         btnCrudCliente.setGraphic(crudCliente);
+        Tooltip ttCrudCliente = new Tooltip();
+        ttCrudCliente.setText("Clientes");
+        btnCrudCliente.setTooltip(ttCrudCliente);
         btnCrudCliente.setOnMouseClicked(new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent event) {
@@ -128,12 +144,24 @@ public class ProgramacionIIIProyecto1 extends Application {
         });
         flowAdmin.getChildren().add(btnCrudCliente);
         
-        Button btnCrudCorteCaja = new Button();
-        ImageView corteCaja = new ImageView();
-        corteCaja = new ImageView(new Image(getClass().getResourceAsStream("View/img/corte_caja.png")));
+        Button btnCrudCorteCaja = new Button("Corte de Caja");
+        btnCrudCorteCaja.setPrefSize(170, 90);
+        ImageView corteCaja = new ImageView(new Image(getClass().getResourceAsStream("View/img/corte_caja.png")));
         corteCaja.setFitWidth(80);
         corteCaja.setFitHeight(80);
         btnCrudCorteCaja.setGraphic(corteCaja);
+        Tooltip ttCorteCaja = new Tooltip();
+        ttCorteCaja.setText("Corte de Caja");
+        btnCrudCorteCaja.setTooltip(ttCorteCaja);
+        btnCrudCorteCaja.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent event) {
+                Stage stage = new CorteCajaView().ventana();
+                stage.initOwner(primaryStage);
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.show();
+            }
+        });
         flowAdmin.getChildren().add(btnCrudCorteCaja);
         
         return flowAdmin;
@@ -141,16 +169,31 @@ public class ProgramacionIIIProyecto1 extends Application {
     
     private FlowPane menuCajero(){
         FlowPane flowCajero = new FlowPane();
-        flowCajero.setPadding(new Insets(5, 0, 5, 0));
-        flowCajero.setVgap(4);
-        flowCajero.setHgap(4);
-        flowCajero.setPrefWrapLength(200); // preferred width allows for two columns
+        flowCajero.setPadding(new Insets(20, 20, 20, 20));
+        flowCajero.setVgap(10);
+        flowCajero.setHgap(10);
+        flowCajero.setPrefWrapLength(500); // preferred width allows for two columns
+        flowCajero.setAlignment(Pos.CENTER); 
 
-        ImageView facturacion = new ImageView();
-        facturacion = new ImageView(new Image(getClass().getResourceAsStream("View/img/facturacion.png")));
+        Button btnFacturacion = new Button("Facturación");
+        btnFacturacion.setPrefSize(170, 90);
+        ImageView facturacion = new ImageView(new Image(getClass().getResourceAsStream("View/img/facturacion.png")));
         facturacion.setFitWidth(80);
         facturacion.setFitHeight(80);
-        flowCajero.getChildren().add(facturacion);
+        btnFacturacion.setGraphic(facturacion);
+        Tooltip ttFacturacion = new Tooltip();
+        ttFacturacion.setText("Facutración");
+        btnFacturacion.setTooltip(ttFacturacion);
+        btnFacturacion.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent event) {
+                Stage stage = new FacturacionView().ventana();
+                stage.initOwner(primaryStage);
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.show();
+            }
+        });
+        flowCajero.getChildren().add(btnFacturacion);
         
         return flowCajero;
     }

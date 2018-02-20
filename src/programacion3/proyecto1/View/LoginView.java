@@ -34,7 +34,6 @@ import programacion3.proyecto1.utils.StatusResponse;
 public class LoginView {
     
     public Application main;
-    public Stage primaryStage;
     
     private Label lbUsuario, lbPassword;
     private TextField txtUsuario;
@@ -44,10 +43,9 @@ public class LoginView {
     private Scene scene;
     private Stage stage;
     
-    public Stage login(Stage primaryStage, Application main){
+    public Stage login(Application main){
         
         this.main = main;
-        this.primaryStage = primaryStage;
         
         lbUsuario = new Label("Usuario");
         txtUsuario = new TextField();
@@ -96,7 +94,7 @@ public class LoginView {
                 
                 StatusResponse status = usrHandler.doLogin(txtUsuario.getText(), txtPassword.getText());
                 if(status.isSuccess()){
-                    ((ProgramacionIIIProyecto1)main).menuPrincipal(primaryStage);
+                    ((ProgramacionIIIProyecto1)main).menuPrincipal();
                     stage.close(); 
                 }else{
                     ValoresStaticos.MSG_ERROR(status.getStatus());

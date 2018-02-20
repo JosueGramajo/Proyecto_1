@@ -38,10 +38,10 @@ public class ClienteView {
     private TableView tblCliente;
 
     private final ObservableList<Cliente> data = FXCollections.observableArrayList(
-            new Cliente(1,"Josue Gramajo", "Ciudad", "12345678", 1),
-            new Cliente(2,"Kevin Vasquez", "Ciudad", "12345678", 1),
-            new Cliente(3,"Manuel Vega", "Ciudad", "12345678", 1),
-            new Cliente(4,"Jose Perez", "Ciudad", "12345678", 1)
+            new Cliente("1","Josue Gramajo", "Ciudad", "12345678", 1),
+            new Cliente("2","Kevin Vasquez", "Ciudad", "12345678", 1),
+            new Cliente("3","Manuel Vega", "Ciudad", "12345678", 1),
+            new Cliente("4","Jose Perez", "Ciudad", "12345678", 1)
         );
     
     public Stage ventana(){    

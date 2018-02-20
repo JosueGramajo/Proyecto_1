@@ -14,25 +14,25 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class Cliente {
     
-    private final SimpleIntegerProperty nit;
+    private final SimpleStringProperty nit;
     private final SimpleStringProperty nombre;
     private final SimpleStringProperty direccion;
     private final SimpleStringProperty telefono;
     private final SimpleIntegerProperty tipo_cliente;
 
-    public Cliente(int nit, String nombre, String direccion, String telefono, int tipo_cliente) {
-        this.nit = new SimpleIntegerProperty(nit);
+    public Cliente(String nit, String nombre, String direccion, String telefono, int tipo_cliente) {
+        this.nit = new SimpleStringProperty(nit);
         this.nombre = new SimpleStringProperty(nombre);
         this.direccion = new SimpleStringProperty(direccion);
         this.telefono = new SimpleStringProperty(telefono);
         this.tipo_cliente = new SimpleIntegerProperty(tipo_cliente);    
     }
 
-    public int getNit() {
+    public String getNit() {
         return nit.get();
     }
     
-    public void setId(int nit) {
+    public void setId(String nit) {
         this.nit.set(nit);
     }
     
