@@ -21,6 +21,7 @@ public class Usuario extends BaseObject{
     private String username;
     private String password;
     private int tipo_usuario;
+    private int sucursal;
 
     /**
      *
@@ -136,4 +137,18 @@ public class Usuario extends BaseObject{
     public void setTipo_usuario(int tipo_usuario) {
         this.tipo_usuario = tipo_usuario;
     }    
+    
+    /**
+     * @return the sucursal
+     */
+    public int getSucursal() {
+        return sucursal;
+    }
+
+    /**
+     * @param sucursal the sucursal to set
+     */
+    public void setSucursal(int sucursal) {
+        this.sucursal = sucursal;
+    } 
 }

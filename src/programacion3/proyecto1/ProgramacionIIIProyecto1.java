@@ -84,7 +84,7 @@ public class ProgramacionIIIProyecto1 extends Application {
         flowAdmin.setAlignment(Pos.CENTER); 
         
         
-        Button btnCrudUsuaro = new Button("Usuaios");
+        Button btnCrudUsuaro = new Button("Usuarios");
         btnCrudUsuaro.setPrefSize(170, 90);
         ImageView crudUsuario = new ImageView(new Image(getClass().getResourceAsStream("View/img/usuario.png")));
         crudUsuario.setFitWidth(80);

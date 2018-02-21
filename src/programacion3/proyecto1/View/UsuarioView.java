@@ -42,10 +42,10 @@ public class UsuarioView {
     private Scene scene;
     private Stage stage;
     
-    private Label lbNombre, lbDireccion, lbTelefono, lbUsername, lbPassword, lbTipoUsuario; 
+    private Label lbNombre, lbDireccion, lbTelefono, lbUsername, lbPassword, lbTipoUsuario, lbSucursal; 
     private TextField tfNombre, tfDireccion, tfTelefono, tfUsername;
     private PasswordField pfPassword;
-    private ComboBox cbTipoUsuario;
+    private ComboBox cbTipoUsuario, cbSucursal;
     private Button btnAgregar, btnEditar, btnCancelarEdicion;
     private TableView tblUsuario;
     
@@ -93,6 +93,10 @@ public class UsuarioView {
         lbTipoUsuario = new Label("Tipo de Usuario");
         cbTipoUsuario = new ComboBox();
         cbTipoUsuario.setMaxWidth(150);
+        
+        lbSucursal = new Label("Sucursal");
+        cbSucursal = new ComboBox();
+        cbSucursal.setMaxWidth(150);
         
         btnAgregar = new Button("Agregar");
         btnEditar = new Button("Editar");
@@ -212,7 +216,16 @@ public class UsuarioView {
             "Cajero"
         );
         lbTipoUsuario = new Label("Cargo");
-        cbTipoUsuario = new ComboBox(options);      
+        cbTipoUsuario = new ComboBox(options);  
+        
+        ObservableList<String> option = 
+        FXCollections.observableArrayList(
+            "Sucursal 1",
+            "Sucursal 2",
+            "Sucursal 3"
+        );
+        lbSucursal = new Label("Sucursal");
+        cbSucursal = new ComboBox(option);
         
         grid = new GridPane();
         grid.setHgap(20);
@@ -230,10 +243,12 @@ public class UsuarioView {
         grid.add(pfPassword, 1,5);
         grid.add(lbTipoUsuario, 0,6);
         grid.add(cbTipoUsuario, 1,6);
-        grid.add(btnAgregar,1,7);
-        grid.add(btnEditar,0,7);
-        grid.add(btnCancelarEdicion, 1, 7);
-        grid.add(tblUsuario, 0, 8, 2,1);
+        grid.add(lbSucursal, 0,7);
+        grid.add(cbSucursal, 1,7);
+        grid.add(btnAgregar,1,8);
+        grid.add(btnEditar,0,8);
+        grid.add(btnCancelarEdicion, 1, 8);
+        grid.add(tblUsuario, 0, 9, 2,1);
              
                 
         scene = new Scene(grid, 640, 700);
