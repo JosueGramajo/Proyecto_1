@@ -5,6 +5,8 @@
  */
 package programacion3.proyecto1;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -35,12 +37,13 @@ import programacion3.proyecto1.View.UsuarioView;
 public class ProgramacionIIIProyecto1 extends Application {
     
     private Stage primaryStage;
+    private Application menu = this;
     
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
         LoginView ventana = new LoginView();
-        ventana.login(this).show();
+        ventana.login(menu).show();
     }
     
     public void menuPrincipal(){
@@ -51,7 +54,7 @@ public class ProgramacionIIIProyecto1 extends Application {
         if(ValoresStaticos.TIPO_USUARIO==1){
             grid.add(menuAdministrador(), 0, 0);
             titulo = "Administrador";
-            scene = new Scene(grid, 170, 470);
+            scene = new Scene(grid, 170, 570);
         }else{
             grid.add(menuCajero(), 0, 0);
             titulo = "Cajero";
@@ -66,9 +69,9 @@ public class ProgramacionIIIProyecto1 extends Application {
         primaryStage.setMinWidth(250);
         primaryStage.setMinHeight(250);
         primaryStage.setMaxWidth(470);
-        primaryStage.setMaxHeight(470);
+        primaryStage.setMaxHeight(570);
         //primaryStage.initStyle(StageStyle.UTILITY);
-        primaryStage.initStyle(StageStyle.DECORATED);
+        //primaryStage.initStyle(StageStyle.DECORATED);
         //primaryStage.initStyle(StageStyle.UNDECORATED); // Aprender bien a usarlo
         //primaryStage.initStyle(StageStyle.UNIFIED);
         //primaryStage.initStyle(StageStyle.TRANSPARENT); // Aprender bien a usarlo
@@ -164,6 +167,25 @@ public class ProgramacionIIIProyecto1 extends Application {
         });
         flowAdmin.getChildren().add(btnCrudCorteCaja);
         
+        Button btnSalir = new Button("Salir");
+        btnSalir.setPrefSize(170, 90);
+        ImageView salir = new ImageView(new Image(getClass().getResourceAsStream("View/img/logout.png")));
+        salir.setFitWidth(80);
+        salir.setFitHeight(80);
+        btnSalir.setGraphic(salir);
+        Tooltip ttSalir = new Tooltip();
+        ttSalir.setText("Salir");
+        btnSalir.setTooltip(ttSalir);
+        btnSalir.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent event) {
+                LoginView ventana = new LoginView();
+                ventana.login(menu).show();
+                primaryStage.close();
+            }
+        });
+        flowAdmin.getChildren().add(btnSalir);
+        
         return flowAdmin;
     }
     
@@ -194,6 +216,25 @@ public class ProgramacionIIIProyecto1 extends Application {
             }
         });
         flowCajero.getChildren().add(btnFacturacion);
+        
+        Button btnSalir = new Button("Salir");
+        btnSalir.setPrefSize(170, 90);
+        ImageView salir = new ImageView(new Image(getClass().getResourceAsStream("View/img/logout.png")));
+        salir.setFitWidth(80);
+        salir.setFitHeight(80);
+        btnSalir.setGraphic(salir);
+        Tooltip ttSalir = new Tooltip();
+        ttSalir.setText("Salir");
+        btnSalir.setTooltip(ttSalir);
+        btnSalir.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent event) {
+                LoginView ventana = new LoginView();
+                ventana.login(menu).show();
+                primaryStage.close();
+            }
+        });
+        flowCajero.getChildren().add(btnSalir);
         
         return flowCajero;
     }
