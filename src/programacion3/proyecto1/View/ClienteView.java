@@ -223,6 +223,14 @@ public class ClienteView {
         return stage;
     }
     private boolean checkFields(){
+        if(tfNombre.getText().equals("") ||
+                tfDireccion.getText().equals("") ||
+                tfTelefono.getText().equals("") ||
+                tfNit.getText().equals("")){
+
+            ValoresStaticos.MSG_ERROR("Todos los campos son obligatorios");
+            return false;
+        }
         return true;
     }
     public void eventos(){
