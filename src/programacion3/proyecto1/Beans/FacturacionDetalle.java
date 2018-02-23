@@ -18,7 +18,7 @@ public class FacturacionDetalle {
     private final SimpleIntegerProperty id_producto;
     private final SimpleStringProperty nombre;
     private final SimpleIntegerProperty cantidad;
-    private final SimpleDoubleProperty precio ;
+    private final SimpleDoubleProperty precio;
     private final SimpleDoubleProperty descuento;
     private final SimpleDoubleProperty sub_total;
 
