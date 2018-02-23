@@ -30,7 +30,7 @@ public class Usuario extends BaseObject{
  
     }
     
-    public Usuario(int id, String nombre, String direccion, String telefono, String username, String password, int tipo_usuario) {
+    public Usuario(int id, String nombre, String direccion, String telefono, String username, String password, int tipo_usuario, int sucursal) {
         this.id = id;
         this.nombre = nombre;
         this.direccion = direccion;
@@ -38,6 +38,7 @@ public class Usuario extends BaseObject{
         this.username = username;
         this.password = password;
         this.tipo_usuario = tipo_usuario;    
+        this.sucursal = sucursal;
     }
 
     /**

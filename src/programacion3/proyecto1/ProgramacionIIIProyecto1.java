@@ -66,10 +66,10 @@ public class ProgramacionIIIProyecto1 extends Application {
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("View/img/facturacion.png")));
         primaryStage.setTitle(titulo);
         primaryStage.setScene(scene);
-        primaryStage.setMinWidth(250);
-        primaryStage.setMinHeight(250);
-        primaryStage.setMaxWidth(470);
-        primaryStage.setMaxHeight(570);
+        primaryStage.setMinWidth(300);
+        primaryStage.setMinHeight(620);
+        primaryStage.setMaxWidth(600);
+        primaryStage.setMaxHeight(620);
         //primaryStage.initStyle(StageStyle.UTILITY);
         //primaryStage.initStyle(StageStyle.DECORATED);
         //primaryStage.initStyle(StageStyle.UNDECORATED); // Aprender bien a usarlo
@@ -88,7 +88,7 @@ public class ProgramacionIIIProyecto1 extends Application {
         
         
         Button btnCrudUsuaro = new Button("Usuarios");
-        btnCrudUsuaro.setPrefSize(170, 90);
+        btnCrudUsuaro.setPrefSize(240, 100);
         ImageView crudUsuario = new ImageView(new Image(getClass().getResourceAsStream("View/img/usuario.png")));
         crudUsuario.setFitWidth(80);
         crudUsuario.setFitHeight(80);
@@ -108,7 +108,7 @@ public class ProgramacionIIIProyecto1 extends Application {
         flowAdmin.getChildren().add(btnCrudUsuaro);
         
         Button btnCrudProducto = new Button("Productos");
-        btnCrudProducto.setPrefSize(170, 90);
+        btnCrudProducto.setPrefSize(240, 100);
         ImageView crudProducto = new ImageView(new Image(getClass().getResourceAsStream("View/img/producto.png")));
         crudProducto.setFitWidth(80);
         crudProducto.setFitHeight(80);
@@ -128,7 +128,7 @@ public class ProgramacionIIIProyecto1 extends Application {
         flowAdmin.getChildren().add(btnCrudProducto);
         
         Button btnCrudCliente = new Button("Clientes");
-        btnCrudCliente.setPrefSize(170, 90);
+        btnCrudCliente.setPrefSize(240, 100);
         ImageView crudCliente = new ImageView(new Image(getClass().getResourceAsStream("View/img/cliente.png")));
         crudCliente.setFitWidth(80);
         crudCliente.setFitHeight(80);
@@ -148,7 +148,7 @@ public class ProgramacionIIIProyecto1 extends Application {
         flowAdmin.getChildren().add(btnCrudCliente);
         
         Button btnCrudCorteCaja = new Button("Corte de Caja");
-        btnCrudCorteCaja.setPrefSize(170, 90);
+        btnCrudCorteCaja.setPrefSize(240, 100);
         ImageView corteCaja = new ImageView(new Image(getClass().getResourceAsStream("View/img/corte_caja.png")));
         corteCaja.setFitWidth(80);
         corteCaja.setFitHeight(80);
@@ -167,8 +167,8 @@ public class ProgramacionIIIProyecto1 extends Application {
         });
         flowAdmin.getChildren().add(btnCrudCorteCaja);
         
-        Button btnSalir = new Button("Salir");
-        btnSalir.setPrefSize(170, 90);
+        Button btnSalir = new Button("Cerrar Sesion");
+        btnSalir.setPrefSize(240, 100);
         ImageView salir = new ImageView(new Image(getClass().getResourceAsStream("View/img/logout.png")));
         salir.setFitWidth(80);
         salir.setFitHeight(80);
@@ -198,7 +198,7 @@ public class ProgramacionIIIProyecto1 extends Application {
         flowCajero.setAlignment(Pos.CENTER); 
 
         Button btnFacturacion = new Button("Facturación");
-        btnFacturacion.setPrefSize(170, 90);
+        btnFacturacion.setPrefSize(240, 100);
         ImageView facturacion = new ImageView(new Image(getClass().getResourceAsStream("View/img/facturacion.png")));
         facturacion.setFitWidth(80);
         facturacion.setFitHeight(80);
@@ -218,7 +218,7 @@ public class ProgramacionIIIProyecto1 extends Application {
         flowCajero.getChildren().add(btnFacturacion);
         
         Button btnSalir = new Button("Salir");
-        btnSalir.setPrefSize(170, 90);
+        btnSalir.setPrefSize(240, 100);
         ImageView salir = new ImageView(new Image(getClass().getResourceAsStream("View/img/logout.png")));
         salir.setFitWidth(80);
         salir.setFitHeight(80);

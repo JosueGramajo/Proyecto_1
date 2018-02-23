@@ -5,78 +5,112 @@
  */
 package programacion3.proyecto1.Beans;
 
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-
 /**
  *
  * @author Kevin Reus
  */
 public class Producto {
     
-    private final SimpleIntegerProperty id;
-    private final SimpleStringProperty nombre;
-    private final SimpleStringProperty marca;
-    private final SimpleStringProperty descripcion;
-    private final SimpleDoubleProperty precio;
-    private final SimpleIntegerProperty existencia;
+    private int id;
+    private String nombre;
+    private String marca;
+    private String descripcion;
+    private Double precio;
+    private int existencia;
     
     public Producto(int id, String nombre, String marca, String descripcion, Double precio, int existencia) {
-        this.id = new SimpleIntegerProperty(id);
-        this.nombre = new SimpleStringProperty(nombre);
-        this.marca = new SimpleStringProperty(marca);
-        this.descripcion = new SimpleStringProperty(descripcion);
-        this.precio = new SimpleDoubleProperty(precio);
-        this.existencia = new SimpleIntegerProperty(existencia);    
+        this.id = id;
+        this.nombre = nombre;
+        this.marca = marca;
+        this.descripcion = descripcion;
+        this.precio = precio;
+        this.existencia = existencia;    
     }
 
+    public Producto(){
     
+    }
+    /**
+     * @return the id
+     */
     public int getId() {
-        return id.get();
+        return id;
     }
 
+    /**
+     * @param id the id to set
+     */
     public void setId(int id) {
-        this.id.set(id);
+        this.id = id;
     }
 
+    /**
+     * @return the nombre
+     */
     public String getNombre() {
-        return nombre.get();
+        return nombre;
     }
 
+    /**
+     * @param nombre the nombre to set
+     */
     public void setNombre(String nombre) {
-        this.nombre.set(nombre);
-    }
-    
-    public String getDescripcion() {
-        return descripcion.get();
+        this.nombre = nombre;
     }
 
-    public void setMarca(String marca) {
-        this.nombre.set(marca);
-    }
-    
+    /**
+     * @return the marca
+     */
     public String getMarca() {
-        return marca.get();
+        return marca;
     }
+
+    /**
+     * @param marca the marca to set
+     */
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    /**
+     * @return the descripcion
+     */
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    /**
+     * @param descripcion the descripcion to set
+     */
     public void setDescripcion(String descripcion) {
-        this.descripcion.set(descripcion);
+        this.descripcion = descripcion;
     }
 
+    /**
+     * @return the precio
+     */
     public Double getPrecio() {
-        return precio.get();
+        return precio;
     }
 
+    /**
+     * @param precio the precio to set
+     */
     public void setPrecio(Double precio) {
-        this.precio.set(precio);
+        this.precio = precio;
     }
-    
+
+    /**
+     * @return the existencia
+     */
     public int getExistencia() {
-        return existencia.get();
+        return existencia;
     }
-    
+
+    /**
+     * @param existencia the existencia to set
+     */
     public void setExistencia(int existencia) {
-        this.existencia.set(existencia);
+        this.existencia = existencia;
     }
-    
 }

@@ -7,7 +7,9 @@ package programacion3.proyecto1.Static;
 
 import java.util.ArrayList;
 import javafx.scene.control.Alert;
+import programacion3.proyecto1.Beans.Lists.AgencyList;
 import programacion3.proyecto1.Beans.Lists.UserList;
+import programacion3.proyecto1.Beans.Sucursal;
 import programacion3.proyecto1.Beans.Usuario;
 import programacion3.proyecto1.utils.JsonUtils;
 
@@ -35,11 +37,25 @@ public class ValoresStaticos {
         alert.showAndWait();
     }
     
+    public static void initAgencies(){
+        Sucursal sucursal1 = new Sucursal(1, "Sucursal 1");
+        Sucursal sucursal2 = new Sucursal(2, "Sucursal 2");
+        Sucursal sucursal3 = new Sucursal(3, "Sucursal 3");
+        
+        ArrayList<Sucursal> list = new ArrayList<Sucursal>();
+        list.add(sucursal1);
+        list.add(sucursal2);
+        list.add(sucursal3);
+        
+        JsonUtils json = new JsonUtils();
+        json.writeJSON(new AgencyList(list), JsonUtils.FILE_TYPE.AGENCY);
+    }
+    
     public static void initUsers(){
-        Usuario user = new Usuario(1, "Josue","Ciudad","22558877","jgramajo","123",1);
-        Usuario user2 = new Usuario(2, "Kevin Vasquez","Ciudad","22558877","kvasquez","123",1);
-        Usuario user3 = new Usuario(3, "Manuel Vega","Ciudad","22558877","mvega","123",1);
-        Usuario user4 = new Usuario(4, "Jose Perez","Ciudad","22558877","jperez","123",1);
+        Usuario user = new Usuario(1, "Josue","Ciudad","22558877","jgramajo","123",1,1);
+        Usuario user2 = new Usuario(2, "Kevin Vasquez","Ciudad","22558877","kvasquez","123",1,1);
+        Usuario user3 = new Usuario(3, "Manuel Vega","Ciudad","22558877","mvega","123",1,1);
+        Usuario user4 = new Usuario(4, "Jose Perez","Ciudad","22558877","jperez","123",1,1);
 
         ArrayList<Usuario> list = new ArrayList<Usuario>();
         list.add(user);

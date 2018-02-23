@@ -6,6 +6,9 @@
 package programacion3.proyecto1.View;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -26,7 +29,9 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import programacion3.proyecto1.Beans.Lists.AgencyList;
 import programacion3.proyecto1.Beans.Lists.UserList;
+import programacion3.proyecto1.Beans.Sucursal;
 import programacion3.proyecto1.Beans.Usuario;
 import programacion3.proyecto1.Handlers.UserHandler;
 import programacion3.proyecto1.Static.ValoresStaticos;
@@ -52,6 +57,8 @@ public class UsuarioView {
     private JsonUtils json = new JsonUtils();
     
     public static int editingId = 0;
+    
+    AgencyList agencyList = new AgencyList();
 
     private final ObservableList<Usuario> data = FXCollections.observableArrayList();
  
@@ -218,12 +225,19 @@ public class UsuarioView {
         lbTipoUsuario = new Label("Cargo");
         cbTipoUsuario = new ComboBox(options);  
         
+        
+        ArrayList<String> agencies = new ArrayList<String>();
+        try {
+            agencyList = JsonUtils.INSTANCIA.readJSON(JsonUtils.FILE_TYPE.AGENCY, AgencyList.class);
+        } catch (IOException ex) {
+            Logger.getLogger(UsuarioView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        for(Sucursal agency : agencyList.getSucursales()){
+            agencies.add(agency.getNombre());
+        }
+        
         ObservableList<String> option = 
-        FXCollections.observableArrayList(
-            "Sucursal 1",
-            "Sucursal 2",
-            "Sucursal 3"
-        );
+        FXCollections.observableArrayList(agencies);
         lbSucursal = new Label("Sucursal");
         cbSucursal = new ComboBox(option);
         
@@ -251,7 +265,7 @@ public class UsuarioView {
         grid.add(tblUsuario, 0, 9, 2,1);
              
                 
-        scene = new Scene(grid, 640, 700);
+        scene = new Scene(grid, 660, 800);
         stage = new Stage();
         
         stage.getIcons().add(new Image(getClass().getResourceAsStream("img/usuario.png")));
@@ -269,7 +283,8 @@ public class UsuarioView {
                 tfTelefono.getText().equals("") ||
                 tfUsername.getText().equals("") ||
                 pfPassword.getText().equals("") ||
-                cbTipoUsuario.getValue() == null){
+                cbTipoUsuario.getValue() == null ||
+                cbSucursal.getValue() == null){
 
             ValoresStaticos.MSG_ERROR("Todos los campos son obligatorios");
             return false;
@@ -295,11 +310,26 @@ public class UsuarioView {
                         rol = 2;
                     }
                     user.setTipo_usuario(rol);
+                    
+                    int agency = 0;
+                    for(Sucursal s : agencyList.getSucursales()){
+                        if(s.getNombre().equals(cbSucursal.getValue())){
+                            agency = s.getId();
+                            break;
+                        }
+                    }
+                    user.setSucursal(agency);
 
                     if(UserHandler.INSTANCIA.addUser(user)){
                         ValoresStaticos.MSG_INFO("Usuario Agregado Exitosamente");
                         getUsers();
                         tblUsuario.refresh();
+                        
+                        tfNombre.setText("");
+                        tfDireccion.setText("");
+                        tfTelefono.setText("");
+                        tfUsername.setText("");
+                        pfPassword.setText("");
                     }else{
                         ValoresStaticos.MSG_ERROR("Ocurrio un error al agregar el usuario");
                     }                
@@ -326,6 +356,15 @@ public class UsuarioView {
                         rol = 2;
                     }
                     user.setTipo_usuario(rol);
+                    
+                    int agency = 0;
+                    for(Sucursal s : agencyList.getSucursales()){
+                        if(s.getNombre().equals(cbSucursal.getValue())){
+                            agency = s.getId();
+                            break;
+                        }
+                    }
+                    user.setSucursal(agency);
 
                     if(UserHandler.INSTANCIA.editUser(user)){
                         ValoresStaticos.MSG_INFO("Usuario Editado Exitosamente");

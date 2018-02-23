@@ -24,7 +24,8 @@ public class JsonUtils {
     
     public enum FILE_TYPE{
         USER("users"),
-        PRODUCT("product"),
+        AGENCY("agencies"),
+        PRODUCT("products"),
         CLIENT("clients"),
         SALE("sales");
         

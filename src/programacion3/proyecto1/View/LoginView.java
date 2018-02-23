@@ -86,6 +86,11 @@ public class LoginView {
         btnAceptar.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                String agenciesDestinationPath = ValoresStaticos.PATH + "/" + JsonUtils.FILE_TYPE.AGENCY.rawValue() + ".json";
+                if(new File(agenciesDestinationPath).exists() == false){
+                    ValoresStaticos.initAgencies();
+                }
+                
                 String destinationPath = ValoresStaticos.PATH + "/" + JsonUtils.FILE_TYPE.USER.rawValue() + ".json";
                 if(new File(destinationPath).exists() == false){
                     ValoresStaticos.initUsers();
