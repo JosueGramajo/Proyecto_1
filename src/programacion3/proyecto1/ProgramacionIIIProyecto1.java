@@ -181,6 +181,8 @@ public class ProgramacionIIIProyecto1 extends Application {
             public void handle(MouseEvent event) {
                 LoginView ventana = new LoginView();
                 ventana.login(menu).show();
+                ValoresStaticos.TIPO_USUARIO = 0;
+                ValoresStaticos.ID_SUCURSAL = 0;
                 primaryStage.close();
             }
         });

@@ -7,7 +7,10 @@ package programacion3.proyecto1.View;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -63,7 +66,7 @@ public class FacturacionView {
     // Detalle Factura
     private Label lbNombreProducto, lbCantidad, lbPrecio, lbDescuento;
     private TextField tfNombreProducto, tfCantidad, tfPrecio, tfDescuento;
-    private Button btnAgregar,btnAnular,btnAgregarProducto;
+    private Button btnAgregar,btnAgregarProducto;
     private ComboBox<Producto> cbProducto;
     private TableView tblFactura;
     
@@ -141,7 +144,6 @@ public class FacturacionView {
         tfDescuento.setMaxWidth(100);
         
         btnAgregar = new Button("Facturar");
-        btnAnular = new Button("Anular");
         
         tblFactura = new TableView();
         tblFactura.setPrefWidth(600);
@@ -242,7 +244,6 @@ public class FacturacionView {
         grid.add(cbFormaPago, 4,7);
         grid.add(lbTotal, 5,7);
         grid.add(tfTotal, 6,7);
-        grid.add(btnAnular, 5, 8);
         grid.add(btnAgregar,6,8);
 
         // Detalle
@@ -311,6 +312,10 @@ public class FacturacionView {
         }
         if(tfDireccion.getText().equals("")){
             ValoresStaticos.MSG_ERROR("Ingrese el numero de la factura");
+            return false;
+        }
+        if(cbFormaPago.getValue() == null){
+            ValoresStaticos.MSG_ERROR("Seleccione una forma de pago");
             return false;
         }
         
@@ -410,6 +415,13 @@ public class FacturacionView {
                     fac.setDireccion(tfDireccion.getText());
                     fac.setNit(tfNit.getText());
                     fac.setTotal(totalFactura);
+                    fac.setTipoVenta(cbFormaPago.getValue().toString());
+                    fac.setSucursal(ValoresStaticos.ID_SUCURSAL);
+                    
+                    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    Date date = new Date();
+                    
+                    fac.setFecha(dateFormat.format(date));
                     
                     ArrayList<DetalleFactura> detalle = new ArrayList<DetalleFactura>();
                     for(DetalleFactura d : data){

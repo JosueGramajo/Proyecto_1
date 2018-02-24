@@ -61,7 +61,7 @@ public class ClientHandler {
                     if(c.getNit().equals(nit)){
                         double nuevoConsumo = (c.getConsumo() + consumo);
                         c.setConsumo(nuevoConsumo);
-                        if(nuevoConsumo > 5000){
+                        if(nuevoConsumo > 5000 && !c.isClienteCredito()){
                             ValoresStaticos.MSG_INFO("El cliente a consumido mas de Q5000, ahora puede consumir al credito");
                             c.setClienteCredito(true);
                         }
@@ -92,6 +92,32 @@ public class ClientHandler {
             Logger.getLogger(UserHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    public void addCreditAmount(String nit, double amount){
+        try {
+            String destinationPath = ValoresStaticos.PATH + "/" + JsonUtils.FILE_TYPE.CLIENT.rawValue() + ".json";
+            if(new File(destinationPath).exists()){
+                ClientList existingList = JsonUtils.INSTANCIA.readJSON(JsonUtils.FILE_TYPE.CLIENT, ClientList.class);
+                for(Cliente c : existingList.getClients()){
+                    if(c.getNit().equals(nit)){
+                        double newAmount = c.getSaldoCredito() + amount;
+                        c.setSaldoCredito(newAmount);
+                        
+                        if(newAmount > 20000 && c.isClienteCredito()){
+                            ValoresStaticos.MSG_ERROR("El usuario ha superado el limite de credito, ya no se le otorgara mas credito");
+                            c.setClienteCredito(false);
+                        }
+                        
+                        JsonUtils.INSTANCIA.writeJSON(existingList, JsonUtils.FILE_TYPE.CLIENT);
+                        
+                        break;
+                    }
+                }
+          
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(UserHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     public boolean addClient(Cliente client){
         try {

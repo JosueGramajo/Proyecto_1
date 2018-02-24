@@ -41,6 +41,7 @@ public class UserHandler {
             for(Usuario us : user.getUserList()){
                 if(us.getUsername().equals(username) && us.getPassword().equals(password)){
                     ValoresStaticos.TIPO_USUARIO = us.getTipo_usuario();
+                    ValoresStaticos.ID_SUCURSAL = us.getSucursal();
                     response.setSuccess(true);
                     response.setStatus("Login exitoso");
                     return response;

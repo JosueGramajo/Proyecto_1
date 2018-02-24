@@ -24,6 +24,12 @@ public class Factura {
     private double total;
     private boolean estado; // activo=true, anulado=false
     
+    private String tipoVenta;
+    
+    private String fecha;
+    
+    private int sucursal;
+    
     private ArrayList<DetalleFactura> detalle;
     
     public Factura(int id, int noFactura, String serie, String nit, String direccion, int formaPago, double total, boolean estado){
@@ -40,6 +46,7 @@ public class Factura {
     
     public Factura(){}
 
+    
     /**
      * @return the id
      */
@@ -178,6 +185,48 @@ public class Factura {
      */
     public void setDetalle(ArrayList<DetalleFactura> detalle) {
         this.detalle = detalle;
+    }
+
+    /**
+     * @return the tipoVenta
+     */
+    public String getTipoVenta() {
+        return tipoVenta;
+    }
+
+    /**
+     * @param tipoVenta the tipoVenta to set
+     */
+    public void setTipoVenta(String tipoVenta) {
+        this.tipoVenta = tipoVenta;
+    }
+
+    /**
+     * @return the fecha
+     */
+    public String getFecha() {
+        return fecha;
+    }
+
+    /**
+     * @param fecha the fecha to set
+     */
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
+    /**
+     * @return the sucursal
+     */
+    public int getSucursal() {
+        return sucursal;
+    }
+
+    /**
+     * @param sucursal the sucursal to set
+     */
+    public void setSucursal(int sucursal) {
+        this.sucursal = sucursal;
     }
     
     

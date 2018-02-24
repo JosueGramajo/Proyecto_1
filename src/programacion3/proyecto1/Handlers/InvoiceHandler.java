@@ -74,10 +74,14 @@ public class InvoiceHandler {
                 client.setTelefono("");
                 client.setSaldoCredito(0);
                 client.setClienteCredito(false);
-                client.setConsumo(fac.getTotal());
+                client.setConsumo(0);
                 ClientHandler.INSTANCIA.addClientIfNotExist(client);
                 
                 ClientHandler.INSTANCIA.addConsumo(fac.getNit(), fac.getTotal());
+                
+                if(fac.getTipoVenta().equals("Crédito")){
+                    ClientHandler.INSTANCIA.addCreditAmount(fac.getNit(), fac.getTotal());
+                }
             }
             
             return result;

@@ -19,12 +19,13 @@ import programacion3.proyecto1.utils.JsonUtils;
  */
 public class ValoresStaticos {
     public static int ID_USUAIRO;
-    public static int ID_LOCAL;
+    public static int ID_SUCURSAL;
     public static int TIPO_USUARIO; //1: admin, 2: cajero
     public final static String PATH = System.getProperty("user.home") + "/Documents/Tiendita";
     
     public static void MSG_ERROR(String msg){
         Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setHeaderText("Error");
         alert.setTitle("Error");
         alert.setContentText(msg);
         alert.showAndWait();
@@ -56,6 +57,7 @@ public class ValoresStaticos {
         Usuario user2 = new Usuario(2, "Kevin Vasquez","Ciudad","22558877","kvasquez","123",1,1);
         Usuario user3 = new Usuario(3, "Manuel Vega","Ciudad","22558877","mvega","123",1,1);
         Usuario user4 = new Usuario(4, "Jose Perez","Ciudad","22558877","jperez","123",1,1);
+        Usuario user5 = new Usuario(4, "Jose Perez","Ciudad","22558877","cajero","123",2,1);
 
         ArrayList<Usuario> list = new ArrayList<Usuario>();
         list.add(user);
