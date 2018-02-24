@@ -6,7 +6,10 @@
 package programacion3.proyecto1.View;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
@@ -31,6 +34,7 @@ import programacion3.proyecto1.Beans.Lists.InvoiceList;
 import programacion3.proyecto1.Beans.Lists.ProductList;
 import programacion3.proyecto1.Beans.Producto;
 import programacion3.proyecto1.Beans.Usuario;
+import programacion3.proyecto1.Static.ValoresStaticos;
 import programacion3.proyecto1.utils.JsonUtils;
 
 /**
@@ -42,7 +46,7 @@ public class CorteCajaView {
     private Scene scene;
     private Stage stage;
     
-    private Label lbNit, lbNombre, lbSerie, lbCorrelativo, lbFormaPago, lbTotalContado, lbTotalCredito, lbTotalCheques;
+    private Label lbNit, lbNombre, lbSerie, lbCorrelativo, lbFormaPago, lbTotalContado, lbTotalCredito, lbTotalCheques, lbFilterFecha, lbFilterSucursal;
     private TextField tfNit, tfNombre, tfSerie, tfCorrelativo;
     private ComboBox cbFormaPago;
     private Button btnBuscar, btnRestaurarDatos;
@@ -55,11 +59,25 @@ public class CorteCajaView {
     private double totalCredito = 0;
     private double totalCheques = 0;
     
+    private String dateFilter = "";
+    private String agencyFilter = "";
+    
     private void initInvoiceData(){
         data.clear();
         try{
             InvoiceList list = JsonUtils.INSTANCIA.readJSON(JsonUtils.FILE_TYPE.SALE, InvoiceList.class);
-            for(Factura f : list.getFacturas()){
+            
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = new Date();
+            
+            List<Factura> results = list.getFacturas();
+            results = results.stream().filter((Factura f) -> f.getFecha().equals(dateFormat.format(date))).collect(Collectors.toList());
+            results = results.stream().filter((Factura f) -> f.getSucursal() == ValoresStaticos.ID_SUCURSAL).collect(Collectors.toList());
+
+            dateFilter = "Fecha: " + dateFormat.format(date);
+            agencyFilter = "Sucursal: " + ValoresStaticos.ID_SUCURSAL;
+            
+            for(Factura f : results){
                 data.add(f);
                 if(f.getTipoVenta().equals("Contado")){
                     totalContado = totalContado + f.getTotal();
@@ -78,7 +96,12 @@ public class CorteCajaView {
         try{
             InvoiceList list = JsonUtils.INSTANCIA.readJSON(JsonUtils.FILE_TYPE.SALE, InvoiceList.class);
             
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+            Date date = new Date();
+            
             List<Factura> results = list.getFacturas();
+            results = results.stream().filter((Factura f) -> f.getFecha().equals(dateFormat.format(date))).collect(Collectors.toList());
+            results = results.stream().filter((Factura f) -> f.getSucursal() == ValoresStaticos.ID_SUCURSAL).collect(Collectors.toList());
             
             if(!tfNit.getText().equals("")) results = results.stream().filter((Factura f) -> f.getNit().equals(tfNit.getText())).collect(Collectors.toList());
             
@@ -127,6 +150,9 @@ public class CorteCajaView {
         
         tblFactura = new TableView();
         tblFactura.setPrefWidth(800);
+        
+        lbFilterFecha = new Label(dateFilter);
+        lbFilterSucursal = new Label(agencyFilter);
         
         tblFactura.setMaxHeight(400);
         tblFactura.setEditable(true);
@@ -190,9 +216,12 @@ public class CorteCajaView {
         
         grid.add(tblFactura, 0,3,8,1);
         
-        grid.add(lbTotalContado, 0, 5);
-        grid.add(lbTotalCredito, 0, 6);
-        grid.add(lbTotalCheques, 0, 7);
+        grid.add(lbFilterFecha, 0, 4);
+        grid.add(lbFilterSucursal, 0, 5);
+        
+        grid.add(lbTotalContado, 0, 6);
+        grid.add(lbTotalCredito, 0, 7);
+        grid.add(lbTotalCheques, 0, 8);
 
         scene = new Scene(grid, 900, 800);
         scene.getStylesheets().add(LoginView.class.getResource("css/bootstrap3.css").toExternalForm());

@@ -418,7 +418,7 @@ public class FacturacionView {
                     fac.setTipoVenta(cbFormaPago.getValue().toString());
                     fac.setSucursal(ValoresStaticos.ID_SUCURSAL);
                     
-                    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                     Date date = new Date();
                     
                     fac.setFecha(dateFormat.format(date));
