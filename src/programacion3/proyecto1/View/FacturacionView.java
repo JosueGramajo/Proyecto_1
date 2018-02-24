@@ -5,6 +5,7 @@
  */
 package programacion3.proyecto1.View;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import javafx.beans.value.ChangeListener;
@@ -19,6 +20,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -31,11 +33,16 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import programacion3.proyecto1.Beans.Cliente;
 import programacion3.proyecto1.Beans.DetalleFactura;
+import programacion3.proyecto1.Beans.Factura;
 import programacion3.proyecto1.Beans.FacturacionDetalle;
 import programacion3.proyecto1.Beans.Lists.ProductList;
 import programacion3.proyecto1.Beans.Lists.UserList;
 import programacion3.proyecto1.Beans.Producto;
 import programacion3.proyecto1.Beans.Usuario;
+import programacion3.proyecto1.Handlers.ClientHandler;
+import programacion3.proyecto1.Handlers.InvoiceHandler;
+import programacion3.proyecto1.Handlers.UserHandler;
+import programacion3.proyecto1.ProgramacionIIIProyecto1;
 import programacion3.proyecto1.Static.ValoresStaticos;
 import programacion3.proyecto1.utils.JsonUtils;
 
@@ -66,7 +73,21 @@ public class FacturacionView {
     
     private Producto selectedProduct = new Producto();
     
+    private static double totalFactura = 0;
+    private static int idDetalle = 1;
+    
+    private String serie = "";
+    private int noFactura = 0;
+    
+    private void initInvoiceData(){
+        noFactura = InvoiceHandler.INSTANCIA.getCurrentInvoiceNumber() + 1;
+        serie = "A";
+    }
+    
     public Stage ventana(){    
+        totalFactura = 0;
+        
+        initInvoiceData();
         initProducts();
         
         lbNit = new Label("Nit");
@@ -82,19 +103,24 @@ public class FacturacionView {
         lbSerie = new Label("Serie");
         tfSerie = new TextField();
         tfSerie.setMaxWidth(80);
+        tfSerie.setText(serie);
+        tfSerie.setEditable(false);
         
         lbCorrelativo = new Label("No. Factura");
         lbCorrelativo.setMinWidth(Region.USE_PREF_SIZE);
         tfCorrelativo = new TextField();
         tfCorrelativo.setMaxWidth(100);
         tfCorrelativo.setEditable(false);
+        tfCorrelativo.setText(Integer.toString(noFactura));
         
         lbFormaPago = new Label("Forma Pago");
         cbFormaPago = new ComboBox();      
-        cbFormaPago.getItems().addAll("Contado", "Crédito", "Cheque" );
+        cbFormaPago.getItems().addAll("Contado");
         lbTotal = new Label("Total");
         tfTotal = new TextField();
         tfTotal.setMaxWidth(80);
+        tfTotal.setEditable(false);
+        tfTotal.setText(Double.toString(totalFactura));
         
         btnAgregarProducto = new Button("Agregar");
         
@@ -114,7 +140,7 @@ public class FacturacionView {
         tfDescuento = new TextField();        
         tfDescuento.setMaxWidth(100);
         
-        btnAgregar = new Button("Agregar");
+        btnAgregar = new Button("Facturar");
         btnAnular = new Button("Anular");
         
         tblFactura = new TableView();
@@ -137,8 +163,42 @@ public class FacturacionView {
         TableColumn colSubTotal = new TableColumn("SubTotal");
         colSubTotal.setCellValueFactory(new PropertyValueFactory<FacturacionDetalle,Integer>("subTotal"));
         
+        TableColumn colAction = new TableColumn("");
+        colAction.setCellFactory(new PropertyValueFactory<>(""));
+        
+        Callback<TableColumn<DetalleFactura,String>, TableCell<DetalleFactura, String>> cellFactory;
+        cellFactory = new Callback<TableColumn<DetalleFactura,String>, TableCell<DetalleFactura, String>>(){
+            @Override
+            public TableCell<DetalleFactura, String> call(TableColumn<DetalleFactura, String> param) {
+                final TableCell<DetalleFactura, String> cell = new TableCell<DetalleFactura, String>(){
+                    final Button btn = new Button("Eliminar");
+                    
+                    @Override
+                    public void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                            setText(null);
+                        } else {
+                            btn.setOnAction(event -> {
+                                DetalleFactura detalle = getTableView().getItems().get(getIndex());
+                                data.removeIf((DetalleFactura d) -> d.getIdDetalle() == detalle.getIdDetalle());
+                                totalFactura = totalFactura - detalle.getSubTotal();
+                                tfTotal.setText(Double.toString(totalFactura));
+                                tblFactura.refresh();
+                            });
+                            setGraphic(btn);
+                            setText(null);
+                        }
+                    }                    
+                };
+                return cell;
+            }   
+        };
+        colAction.setCellFactory(cellFactory);
+        
         tblFactura.setItems(data);
-        tblFactura.getColumns().addAll(colNombre, colCantidad, colPrecio, colDescuento, colSubTotal);
+        tblFactura.getColumns().addAll(colNombre, colCantidad, colPrecio, colDescuento, colSubTotal, colAction);
         
         
         cbProducto = new ComboBox(products);
@@ -156,7 +216,9 @@ public class FacturacionView {
         cbProducto.valueProperty().addListener((ObservableValue<? extends Producto> observable, Producto oldValue, Producto newValue) -> {
             Producto p = cbProducto.getValue();
             selectedProduct = p;
-            tfPrecio.setText(p.getPrecio().toString());
+            if(p != null){
+                tfPrecio.setText(p.getPrecio().toString());
+            }
         });
        
         
@@ -170,10 +232,10 @@ public class FacturacionView {
         grid.add(tfSerie, 1,0);
         grid.add(lbCorrelativo, 2,0);
         grid.add(tfCorrelativo, 3,0);
-        grid.add(lbNit, 5,1);
-        grid.add(tfNit, 6,1);
-        grid.add(lbNombre, 0,1);
-        grid.add(tfNombre, 1,1,4,1);
+        grid.add(lbNit, 0,1);
+        grid.add(tfNit, 1,1);
+        grid.add(lbNombre, 2,1);
+        grid.add(tfNombre, 3,1,4,1);
         grid.add(lbDireccion, 0,2);
         grid.add(tfDireccion, 1,2,6,1);
         grid.add(lbFormaPago, 3,7);
@@ -226,6 +288,34 @@ public class FacturacionView {
         }
         return true;
     }
+    private boolean checkInvoiceValues(){
+        if(data.size() == 0){
+            ValoresStaticos.MSG_ERROR("Debe seleccionar al menos un producto");
+            return false;
+        }
+        if(tfSerie.getText().equals("")){
+            ValoresStaticos.MSG_ERROR("Ingrese la serie de la factura");
+            return false;
+        }
+        if(tfSerie.getText().equals("")){
+            ValoresStaticos.MSG_ERROR("Ingrese el numero de la factura");
+            return false;
+        }
+        if(tfNombre.getText().equals("")){
+            ValoresStaticos.MSG_ERROR("Ingrese el nombre de la factura");
+            return false;
+        }
+        if(tfNit.getText().equals("")){
+            ValoresStaticos.MSG_ERROR("Ingrese el numero de la factura");
+            return false;
+        }
+        if(tfDireccion.getText().equals("")){
+            ValoresStaticos.MSG_ERROR("Ingrese el numero de la factura");
+            return false;
+        }
+        
+        return true;
+    }
     private boolean isInteger(String value){
         try{
             int test = Integer.parseInt(value);
@@ -261,18 +351,79 @@ public class FacturacionView {
         detalle.setDescuento(descuento);
         detalle.setPrecio(selectedProduct.getPrecio());
         detalle.setSubTotal((cantidad * selectedProduct.getPrecio()));
+        detalle.setIdDetalle(idDetalle);
+        
+        totalFactura = totalFactura + (cantidad * selectedProduct.getPrecio());
+        tfTotal.setText(Double.toString(totalFactura));
         
         data.add(detalle);
         
         tblFactura.refresh();
+        
+        idDetalle++;
     }
     public void eventos(){
+        tfNit.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            if(!newVal){
+                Cliente client = ClientHandler.INSTANCIA.searchClientByNit(tfNit.getText());
+                if(client != null){
+                    tfNombre.setText(client.getNombre());
+                    tfDireccion.setText(client.getDireccion());
+                    
+                    cbFormaPago.getItems().clear();
+                    if(client.isClienteCredito()){ 
+                        cbFormaPago.getItems().addAll("Contado", "Crédito", "Cheque" );
+                    }else{    
+                        cbFormaPago.getItems().addAll("Contado");
+                    }
+                }else{
+                    tfNombre.setText("");
+                    tfDireccion.setText("");
+                    cbFormaPago.getItems().clear();
+                    cbFormaPago.getItems().addAll("Contado");
+                }
+            }
+        });
+                
         btnAgregarProducto.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if(checkProductValues()){
                     double descuento = tfCantidad.getText().equals("") ? 0 : Double.parseDouble(tfCantidad.getText());
                     addProductDetail(Integer.parseInt(tfCantidad.getText()),descuento);
+                    
+                    tfCantidad.setText("");
+                    tfPrecio.setText("");
+                    tfDescuento.setText("");
+                    cbProducto.setValue(null);
+                }
+            }
+        });
+        btnAgregar.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(checkInvoiceValues()){
+                    Factura fac = new Factura();
+                    fac.setNoFactura(Integer.parseInt(tfCorrelativo.getText()));
+                    fac.setSerie(tfSerie.getText());
+                    fac.setNombre(tfNombre.getText());
+                    fac.setDireccion(tfDireccion.getText());
+                    fac.setNit(tfNit.getText());
+                    fac.setTotal(totalFactura);
+                    
+                    ArrayList<DetalleFactura> detalle = new ArrayList<DetalleFactura>();
+                    for(DetalleFactura d : data){
+                        detalle.add(d);
+                    }
+                    fac.setDetalle(detalle);
+                    
+                    if(InvoiceHandler.INSTANCIA.addInvoice(fac)){
+                        ValoresStaticos.MSG_INFO("Factura generada correctamente");
+                        totalFactura = 0;
+                        stage.close(); 
+                    }else{
+                        ValoresStaticos.MSG_ERROR("Ocurrio un error al generar la factura");
+                    }
                 }
             }
         });

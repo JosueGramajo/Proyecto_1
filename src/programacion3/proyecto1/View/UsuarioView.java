@@ -138,7 +138,7 @@ public class UsuarioView {
         colAction.setCellFactory(new PropertyValueFactory<>(""));
         
         TableColumn colActionEdit = new TableColumn("");
-        colAction.setCellFactory(new PropertyValueFactory<>(""));
+        colActionEdit.setCellFactory(new PropertyValueFactory<>(""));
         
         Callback<TableColumn<Usuario,String>, TableCell<Usuario, String>> cellFactory;
         cellFactory = new Callback<TableColumn<Usuario,String>, TableCell<Usuario, String>>(){

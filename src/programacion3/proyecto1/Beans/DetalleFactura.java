@@ -10,6 +10,7 @@ package programacion3.proyecto1.Beans;
  * @author josue
  */
 public class DetalleFactura {
+    private int idDetalle;
     private int idProducto;
     private String nombre;
     private int cantidad;
@@ -110,6 +111,20 @@ public class DetalleFactura {
      */
     public void setSubTotal(double subTotal) {
         this.subTotal = subTotal;
+    }
+
+    /**
+     * @return the idDetalle
+     */
+    public int getIdDetalle() {
+        return idDetalle;
+    }
+
+    /**
+     * @param idDetalle the idDetalle to set
+     */
+    public void setIdDetalle(int idDetalle) {
+        this.idDetalle = idDetalle;
     }
     
     

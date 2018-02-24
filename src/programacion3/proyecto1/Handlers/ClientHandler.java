@@ -24,6 +24,75 @@ import programacion3.proyecto1.utils.JsonUtils;
 public class ClientHandler {
     public static ClientHandler INSTANCIA = new ClientHandler();
     
+    public void addClientIfNotExist(Cliente client){
+        try {
+            boolean exist = false;
+            
+            String destinationPath = ValoresStaticos.PATH + "/" + JsonUtils.FILE_TYPE.CLIENT.rawValue() + ".json";
+            if(new File(destinationPath).exists()){
+                ClientList existingList = JsonUtils.INSTANCIA.readJSON(JsonUtils.FILE_TYPE.CLIENT, ClientList.class);
+                for(Cliente c : existingList.getClients()){
+                    if(c.getNit().equals(client.getNit())){
+                        exist = true;
+                        break;
+                    }
+                }
+                if(!exist){
+                    existingList.getClients().add(client);
+                    JsonUtils.INSTANCIA.writeJSON(existingList, JsonUtils.FILE_TYPE.CLIENT);  
+                }
+            }else{
+                ClientList newList = new ClientList();
+                ArrayList<Cliente> list = new ArrayList<Cliente>();
+                list.add(client);
+                newList.setClients(list);
+                JsonUtils.INSTANCIA.writeJSON(newList, JsonUtils.FILE_TYPE.CLIENT);  
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(UserHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void addConsumo(String nit, double consumo){
+        String destinationPath = ValoresStaticos.PATH + "/" + JsonUtils.FILE_TYPE.CLIENT.rawValue() + ".json";
+        if(new File(destinationPath).exists()){
+            try {
+                ClientList existingList = JsonUtils.INSTANCIA.readJSON(JsonUtils.FILE_TYPE.CLIENT, ClientList.class);
+                for(Cliente c : existingList.getClients()){
+                    if(c.getNit().equals(nit)){
+                        double nuevoConsumo = (c.getConsumo() + consumo);
+                        c.setConsumo(nuevoConsumo);
+                        if(nuevoConsumo > 5000){
+                            ValoresStaticos.MSG_INFO("El cliente a consumido mas de Q5000, ahora puede consumir al credito");
+                            c.setClienteCredito(true);
+                        }
+                        
+                        JsonUtils.INSTANCIA.writeJSON(existingList, JsonUtils.FILE_TYPE.CLIENT); 
+                        
+                        break;
+                    }
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    public Cliente searchClientByNit(String nit){
+        try {
+            String destinationPath = ValoresStaticos.PATH + "/" + JsonUtils.FILE_TYPE.CLIENT.rawValue() + ".json";
+            if(new File(destinationPath).exists()){
+                ClientList existingList = JsonUtils.INSTANCIA.readJSON(JsonUtils.FILE_TYPE.CLIENT, ClientList.class);
+                for(Cliente c : existingList.getClients()){
+                    if(c.getNit().equals(nit)){
+                        return c;
+                    }
+                }
+          
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(UserHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     public boolean addClient(Cliente client){
         try {
             String destinationPath = ValoresStaticos.PATH + "/" + JsonUtils.FILE_TYPE.CLIENT.rawValue() + ".json";
