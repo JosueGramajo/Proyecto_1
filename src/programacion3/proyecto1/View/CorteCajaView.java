@@ -28,12 +28,13 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import programacion3.proyecto1.Beans.CorteCaja;
 import programacion3.proyecto1.Beans.Factura;
-import programacion3.proyecto1.Beans.Facturacion;
 import programacion3.proyecto1.Beans.Lists.InvoiceList;
 import programacion3.proyecto1.Beans.Lists.ProductList;
 import programacion3.proyecto1.Beans.Producto;
 import programacion3.proyecto1.Beans.Usuario;
+import programacion3.proyecto1.Handlers.CorteCajaHandler;
 import programacion3.proyecto1.Static.ValoresStaticos;
 import programacion3.proyecto1.utils.JsonUtils;
 
@@ -49,7 +50,7 @@ public class CorteCajaView {
     private Label lbNit, lbNombre, lbSerie, lbCorrelativo, lbFormaPago, lbTotalContado, lbTotalCredito, lbTotalCheques, lbFilterFecha, lbFilterSucursal;
     private TextField tfNit, tfNombre, tfSerie, tfCorrelativo;
     private ComboBox cbFormaPago;
-    private Button btnBuscar, btnRestaurarDatos;
+    private Button btnBuscar, btnRestaurarDatos, btnRealizarCorte;
     
     private TableView tblFactura;
 
@@ -74,7 +75,7 @@ public class CorteCajaView {
             results = results.stream().filter((Factura f) -> f.getFecha().equals(dateFormat.format(date))).collect(Collectors.toList());
             results = results.stream().filter((Factura f) -> f.getSucursal() == ValoresStaticos.ID_SUCURSAL).collect(Collectors.toList());
 
-            dateFilter = "Fecha: " + dateFormat.format(date);
+            dateFilter = dateFormat.format(date);
             agencyFilter = "Sucursal: " + ValoresStaticos.ID_SUCURSAL;
             
             for(Factura f : results){
@@ -148,49 +149,51 @@ public class CorteCajaView {
         lbTotalCredito = new Label("Total credito: Q." + totalCredito);
         lbTotalCheques = new Label("Total cheques: Q." + totalCheques);
         
+        btnRealizarCorte = new Button("Realizar Corte");
+        
         tblFactura = new TableView();
         tblFactura.setPrefWidth(800);
         
-        lbFilterFecha = new Label(dateFilter);
+        lbFilterFecha = new Label("Fecha: " + dateFilter);
         lbFilterSucursal = new Label(agencyFilter);
         
         tblFactura.setMaxHeight(400);
         tblFactura.setEditable(true);
     
         TableColumn colId = new TableColumn("ID");
-        colId.setCellValueFactory(new PropertyValueFactory<Facturacion,Integer>("id"));
+        colId.setCellValueFactory(new PropertyValueFactory<Factura,Integer>("id"));
         colId.prefWidthProperty().bind(tblFactura.widthProperty().divide(9));
         
         TableColumn colSerie = new TableColumn("Serie");
-        colSerie.setCellValueFactory(new PropertyValueFactory<Facturacion,String>("serie"));
+        colSerie.setCellValueFactory(new PropertyValueFactory<Factura,String>("serie"));
         colSerie.prefWidthProperty().bind(tblFactura.widthProperty().divide(9));
         
         TableColumn colCorrelativo = new TableColumn("No Factura");
-        colCorrelativo.setCellValueFactory(new PropertyValueFactory<Facturacion,String>("noFactura"));
+        colCorrelativo.setCellValueFactory(new PropertyValueFactory<Factura,String>("noFactura"));
         colCorrelativo.prefWidthProperty().bind(tblFactura.widthProperty().divide(9));
         
         TableColumn colNit = new TableColumn("Nit");
-        colNit.setCellValueFactory(new PropertyValueFactory<Facturacion,String>("nit"));
+        colNit.setCellValueFactory(new PropertyValueFactory<Factura,String>("nit"));
         colNit.prefWidthProperty().bind(tblFactura.widthProperty().divide(9));
         
         TableColumn colNombre = new TableColumn("Nombre");
-        colNombre.setCellValueFactory(new PropertyValueFactory<Facturacion,Integer>("nombre"));
+        colNombre.setCellValueFactory(new PropertyValueFactory<Factura,Integer>("nombre"));
         colNombre.prefWidthProperty().bind(tblFactura.widthProperty().divide(9));
         
         TableColumn colFormaPago = new TableColumn("Forma Pago");
-        colFormaPago.setCellValueFactory(new PropertyValueFactory<Facturacion,Integer>("tipoVenta"));
+        colFormaPago.setCellValueFactory(new PropertyValueFactory<Factura,Integer>("tipoVenta"));
         colFormaPago.prefWidthProperty().bind(tblFactura.widthProperty().divide(9));
         
         TableColumn colTotal = new TableColumn("Total");
-        colTotal.setCellValueFactory(new PropertyValueFactory<Facturacion,Integer>("total"));
+        colTotal.setCellValueFactory(new PropertyValueFactory<Factura,Integer>("total"));
         colTotal.prefWidthProperty().bind(tblFactura.widthProperty().divide(9));
         
         TableColumn colEstado = new TableColumn("Fecha");
-        colEstado.setCellValueFactory(new PropertyValueFactory<Facturacion,Integer>("fecha"));
+        colEstado.setCellValueFactory(new PropertyValueFactory<Factura,Integer>("fecha"));
         colEstado.prefWidthProperty().bind(tblFactura.widthProperty().divide(9));
         
         TableColumn colSucursal = new TableColumn("Sucursal");
-        colSucursal.setCellValueFactory(new PropertyValueFactory<Facturacion,Integer>("sucursal"));
+        colSucursal.setCellValueFactory(new PropertyValueFactory<Factura,Integer>("sucursal"));
         colSucursal.prefWidthProperty().bind(tblFactura.widthProperty().divide(9));
         
         tblFactura.setItems(data);
@@ -215,6 +218,8 @@ public class CorteCajaView {
         grid.add(btnRestaurarDatos, 1,2,2,1);
         
         grid.add(tblFactura, 0,3,8,1);
+        
+        grid.add(btnRealizarCorte, 5, 4);
         
         grid.add(lbFilterFecha, 0, 4);
         grid.add(lbFilterSucursal, 0, 5);
@@ -249,6 +254,25 @@ public class CorteCajaView {
                 initInvoiceData();
                 tblFactura.refresh();
                 btnRestaurarDatos.setVisible(false);
+            }
+        });
+        btnRealizarCorte.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                CorteCaja c = new CorteCaja();
+                
+                c.setFecha(dateFilter);
+                c.setSucursal(ValoresStaticos.ID_SUCURSAL);
+                c.setTotalContado(totalContado);
+                c.setTotalCredito(totalCredito);
+                c.setTotalCheque(totalCheques);
+                
+                if(CorteCajaHandler.INSTANCIA.addCorteCaja(c)){
+                    ValoresStaticos.MSG_INFO("Corte de caja ingresado exitosamente");
+                    stage.close(); 
+                }else{
+                    ValoresStaticos.MSG_ERROR("Ocurrio un error");
+                }
             }
         });
     }

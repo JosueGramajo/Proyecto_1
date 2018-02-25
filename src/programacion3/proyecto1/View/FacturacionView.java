@@ -37,7 +37,6 @@ import javafx.util.Callback;
 import programacion3.proyecto1.Beans.Cliente;
 import programacion3.proyecto1.Beans.DetalleFactura;
 import programacion3.proyecto1.Beans.Factura;
-import programacion3.proyecto1.Beans.FacturacionDetalle;
 import programacion3.proyecto1.Beans.Lists.ProductList;
 import programacion3.proyecto1.Beans.Lists.UserList;
 import programacion3.proyecto1.Beans.Producto;
@@ -151,19 +150,19 @@ public class FacturacionView {
         tblFactura.setEditable(true);
     
         TableColumn colNombre = new TableColumn("Producto");
-        colNombre.setCellValueFactory(new PropertyValueFactory<FacturacionDetalle,String>("nombre"));
+        colNombre.setCellValueFactory(new PropertyValueFactory<DetalleFactura,String>("nombre"));
         
         TableColumn colCantidad = new TableColumn("Cantidad");
-        colCantidad.setCellValueFactory(new PropertyValueFactory<FacturacionDetalle,String>("cantidad"));
+        colCantidad.setCellValueFactory(new PropertyValueFactory<DetalleFactura,String>("cantidad"));
         
         TableColumn colPrecio = new TableColumn("Precio");
-        colPrecio.setCellValueFactory(new PropertyValueFactory<FacturacionDetalle,String>("precio"));
+        colPrecio.setCellValueFactory(new PropertyValueFactory<DetalleFactura,String>("precio"));
         
         TableColumn colDescuento = new TableColumn("Descuento");
-        colDescuento.setCellValueFactory(new PropertyValueFactory<FacturacionDetalle,Integer>("descuento"));
+        colDescuento.setCellValueFactory(new PropertyValueFactory<DetalleFactura,Integer>("descuento"));
         
         TableColumn colSubTotal = new TableColumn("SubTotal");
-        colSubTotal.setCellValueFactory(new PropertyValueFactory<FacturacionDetalle,Integer>("subTotal"));
+        colSubTotal.setCellValueFactory(new PropertyValueFactory<DetalleFactura,Integer>("subTotal"));
         
         TableColumn colAction = new TableColumn("");
         colAction.setCellFactory(new PropertyValueFactory<>(""));
@@ -283,9 +282,11 @@ public class FacturacionView {
             ValoresStaticos.MSG_ERROR("La cantidad debe ser un valor numerico");
             return false;
         }
-        if(!tfDescuento.getText().equals("") && isDouble(tfDescuento.getText())){
-            ValoresStaticos.MSG_ERROR("El descuento debe ser un valor numerico");
-            return false;
+        if(!tfDescuento.getText().equals("")){
+            if(!isDouble(tfDescuento.getText())){
+                ValoresStaticos.MSG_ERROR("El descuento debe ser un valor numerico");
+                return false;   
+            }
         }
         return true;
     }
@@ -394,7 +395,7 @@ public class FacturacionView {
             @Override
             public void handle(MouseEvent event) {
                 if(checkProductValues()){
-                    double descuento = tfCantidad.getText().equals("") ? 0 : Double.parseDouble(tfCantidad.getText());
+                    double descuento = tfDescuento.getText().equals("") ? 0 : Double.parseDouble(tfDescuento.getText());
                     addProductDetail(Integer.parseInt(tfCantidad.getText()),descuento);
                     
                     tfCantidad.setText("");

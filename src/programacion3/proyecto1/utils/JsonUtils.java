@@ -27,7 +27,8 @@ public class JsonUtils {
         AGENCY("agencies"),
         PRODUCT("products"),
         CLIENT("clients"),
-        SALE("sales");
+        SALE("sales"),
+        CORTE("cortes");
         
         private String value;
         

@@ -39,6 +39,13 @@ public class InvoiceHandler {
     }
     public boolean addInvoice(Factura fac){
         boolean result = false;
+
+        
+        if(CorteCajaHandler.INSTANCIA.checkExisting(fac.getSucursal())){
+            ValoresStaticos.MSG_ERROR("Ya se realizo el corte de caja para la fecha actual, no se pueden ingresar mas facturas");
+            return false;
+        }
+        
         try {
             String destinationPath = ValoresStaticos.PATH + "/" + JsonUtils.FILE_TYPE.SALE.rawValue() + ".json";
             if(new File(destinationPath).exists()){

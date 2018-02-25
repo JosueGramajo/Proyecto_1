@@ -5,8 +5,6 @@
  */
 package programacion3.proyecto1.Beans;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 
 /**
  *
